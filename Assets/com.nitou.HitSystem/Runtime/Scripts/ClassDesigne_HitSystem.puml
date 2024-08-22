@@ -1,0 +1,33 @@
+@startuml HitSystem
+skinparam backgroundColor gray
+
+
+namespace nitou.HitSystem{
+
+    ' 攻撃を与えるオブジェクト(※Colliderを持つ)
+    class HitProvider{}
+
+    class MeleeHitProvider{}
+
+
+
+    ' 攻撃を検知するオブジェクト(※Colliderを持つ)
+    class HitReciver{
+        + Action OnHit
+    }
+
+
+    ' ヒットを管理するクラス
+    class HitReciptionManager{
+        - List<>
+    }
+
+
+
+    ' 依存関係
+    HitProvider --> HitReciver
+
+}
+
+
+@enduml

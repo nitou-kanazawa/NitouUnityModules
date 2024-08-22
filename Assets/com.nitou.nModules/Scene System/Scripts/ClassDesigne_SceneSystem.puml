@@ -1,0 +1,45 @@
+@startuml SceneSystem
+skinparam backgroundColor gray
+
+
+
+namespace nitou.SceneSystem{
+
+    ' シーン間で橋渡しするデータ
+    interface ISceneData{}
+
+    ' シーン上の起点オブジェクト
+    interface ISceneEntryPoint{
+        + OnInitialize()
+        + OnEnter()
+        + OnExit()
+        + OnFinalize()
+    }
+
+    ' MonoBehaviourを継承した基底クラス
+    class SceneEntryPointBase{}
+
+    static class SceneNavigator{}
+
+    ' 継承関係
+    SceneEntryPointBase -up-|> ISceneEntryPoint
+    ' 依存関係
+
+}
+
+namespace nitou.SceneSystem{
+
+    ' シーンハンドル
+    interface ISceneHandle{
+        + Load(IProgress<float>, Cts)
+        + Unload(IProgress<float>, Cts)
+    }
+
+    ' -----------------
+    ' 依存関係
+
+}
+
+
+
+@enduml

@@ -1,0 +1,19 @@
+{
+    "name": "Nitou.Modules",
+    "rootNamespace": "nitou",
+    "references": [
+        "Nitou.Lib",
+        "UniTask",
+        "UniRx",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
