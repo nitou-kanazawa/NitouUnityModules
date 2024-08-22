@@ -1,19 +1,19 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Sirenix.OdinInspector;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace nitou.SceneSystem.Demo{
     using nitou.RichText;
-    using nitou.Inspector;
 
     /// <summary>
     /// インスペクタで設定したシーンを読み込むコンポーネント
     /// </summary>
     [AddComponentMenu(ComponentMenu.Prefix.Scene + "Scene Loader")]
-    public class SceneLoadComponent : MonoBehaviour{
+    public sealed class SceneLoadComponent : MonoBehaviour{
 
         public SceneObject _nextScene;
 

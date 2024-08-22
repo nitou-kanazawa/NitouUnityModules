@@ -41,6 +41,7 @@ namespace nitou.SceneSystem {
         /// </summary>
         public static void SetData<TData>(TData data)
             where TData : SceneSharedData {
+            if (data == null) throw new System.ArgumentNullException(nameof(data));
 
             var type = typeof(TData);
             if (_sharedData.ContainsKey(type)) {
@@ -60,7 +61,6 @@ namespace nitou.SceneSystem {
                 Debug_.LogWarning("登録されているデータはありません．");
                 return;
             }
-
             _sharedData.Remove(type);
         }
 
