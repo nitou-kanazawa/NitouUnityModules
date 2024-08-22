@@ -2,8 +2,7 @@
 namespace nitou.BachProcessor{
 
     /// <summary>
-    /// Interface for batch processing of components.
-    /// Provides access to the ID of a component during batch processing and whether it is registered.
+    /// バッチ処理の対象コンポーネントのインターフェース
     /// </summary>
     public interface IComponentIndex{
 

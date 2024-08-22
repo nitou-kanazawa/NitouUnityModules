@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4da7a223f051644fba8a81d37b58d91, type: 3}
   m_Name: Event_Void
   m_EditorClassIdentifier: 
-  _description: ssss
+  _description: test event channel
