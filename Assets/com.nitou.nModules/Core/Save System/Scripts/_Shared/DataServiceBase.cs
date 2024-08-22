@@ -10,6 +10,9 @@ using UnityEngine;
 namespace nitou.SaveSystem {
     using nitou.SaveSystem.Utils;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class DataServiceBase : IDataService {
 
         // ƒpƒX

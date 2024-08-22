@@ -10,21 +10,21 @@ namespace nitou.SceneSystem{
         /// <summary>
         /// シーン読み込み時の処理
         /// </summary>
-        UniTask OnSceneLoad();
+        UniTask OnSceneLoadAsync();
 
         /// <summary>
         /// アクティブシーンに設定された時の処理
         /// </summary>
-        UniTask OnSceneActivate();
+        UniTask OnSceneActivateAsync();
 
         /// <summary>
         /// アクティブシーンから解除された時の処理
         /// </summary>
-        UniTask OnSceneDeactivate();
+        UniTask OnSceneDeactivateAsync();
 
         /// <summary>
         /// シーン解放時の処理
         /// </summary>
-        UniTask OnSceneUnload();
+        UniTask OnSceneUnloadAsync();
     }
 }

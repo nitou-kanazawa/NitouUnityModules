@@ -32,6 +32,17 @@ namespace nitou.SceneSystem{
         public static bool IsLevel(this SceneType type) => 
             (type == SceneType.MainLevel) || (type == SceneType.SubLevel);
 
+        /// <summary>
+        /// タイプに対応したカラーへ変換する
+        /// </summary>
+        public static Color ToColor(this SceneType type) {
+            return type switch {
+                SceneType.MainLevel => Colors.Orange,
+                SceneType.SubLevel => Colors.Cyan,
+                SceneType.Other => Colors.Gray,
+                _ => throw new System.NotImplementedException()
+            };
+        }
     }
 
 }

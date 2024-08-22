@@ -2,10 +2,10 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Sirenix.OdinInspector;
 
 namespace nitou.SceneSystem {
-    using nitou.Inspector;
-    //using nitou.Sound;
+    using nitou.Sound;
 
     /// <summary>
     /// シーン上への参照起点となるオブジェクト
@@ -13,15 +13,16 @@ namespace nitou.SceneSystem {
     [DisallowMultipleComponent]
     public class SceneEntryPoint : MonoBehaviour, ISceneEntryPoint {
 
+        [EnumToggleButtons, HideLabel]
         [SerializeField] private SceneType _sceneType = SceneType.MainLevel;
 
         // カメラ
         [Title("Main Level Settings")]
-        //[ShowIf("_sceneType", SceneType.MainLevel)]
+        [ShowIf("@_sceneType", SceneType.MainLevel)]
         [SerializeField, Indent] Camera _sceneCamera;
 
         // BGM
-        //[ShowIf("_sceneType", SceneType.MainLevel)]
+        [ShowIf("@_sceneType", SceneType.MainLevel)]
         [SerializeField, Indent] AudioClip _bgmClip;
 
 
@@ -50,12 +51,11 @@ namespace nitou.SceneSystem {
         /// <summary>
         /// シーンが読み込まれた時の処理
         /// </summary>
-        async UniTask ISceneEntryPoint.OnSceneLoad() {
+        async UniTask ISceneEntryPoint.OnSceneLoadAsync() {
 
             if (_sceneCamera != null && SceneManager.sceneCount > 1) {
                 _sceneCamera.gameObject.SetActive(false);
             }
-
 
             // 個別処理
             //Debug_.Log("OnLoadInternal");
@@ -65,14 +65,14 @@ namespace nitou.SceneSystem {
         /// <summary>
         /// シーンが解放された時の処理
         /// </summary>
-        async UniTask ISceneEntryPoint.OnSceneUnload() {
+        async UniTask ISceneEntryPoint.OnSceneUnloadAsync() {
             await OnUnloadInternal();
         }
 
         /// <summary>
         /// アクティブなシーンに設定された時の処理
         /// </summary>
-        async UniTask ISceneEntryPoint.OnSceneActivate() {
+        async UniTask ISceneEntryPoint.OnSceneActivateAsync() {
 
             // 共通処理
             switch (_sceneType) {
@@ -87,7 +87,7 @@ namespace nitou.SceneSystem {
 
                     // BGM再生
                     if (_bgmClip != null) {
-                        //Sound.PlayBGM(_bgmClip);
+                        Sound.PlayBGM(_bgmClip);
                     }
 
                     break;
@@ -109,7 +109,7 @@ namespace nitou.SceneSystem {
         /// <summary>
         /// アクティブなシーンから解除された時の処理
         /// </summary>
-        async UniTask ISceneEntryPoint.OnSceneDeactivate() {
+        async UniTask ISceneEntryPoint.OnSceneDeactivateAsync() {
 
             // 共通処理
 

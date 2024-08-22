@@ -31,10 +31,10 @@ namespace nitou.SceneSystem {
 
 
         /// ----------------------------------------------------------------------------
-        // Public Methord
+        #region Shared Data
 
-        // シーン共有データ
-        private static Dictionary<Type, SceneSharedData> _sharedData = new();
+        // シーン間共有データ
+        private static readonly Dictionary<Type, SceneSharedData> _sharedData = new();
 
         /// <summary>
         /// 共有データを登録する
@@ -80,6 +80,7 @@ namespace nitou.SceneSystem {
             data = _sharedData[type] as TData;
             return true;
         }
+        #endregion
 
 
         /// ----------------------------------------------------------------------------
@@ -203,7 +204,7 @@ namespace nitou.SceneSystem {
 
                 // 読み込みイベント
                 if (scene.TryGetEntryPoint(out var entryPoint)) {
-                    entryPoint.OnSceneLoad();
+                    entryPoint.OnSceneLoadAsync();
                 }
             }
 
@@ -211,7 +212,7 @@ namespace nitou.SceneSystem {
                 // アクティブ化イベント
                 var activeScene = SceneManager.GetActiveScene();
                 if (activeScene.TryGetEntryPoint(out var entryPoint)) {
-                    entryPoint.OnSceneActivate();
+                    entryPoint.OnSceneActivateAsync();
                 }
             }
 
@@ -224,7 +225,7 @@ namespace nitou.SceneSystem {
 
                     // イベント処理
                     if (x.Item1.TryGetEntryPoint(out var entry)) {
-                        entry.OnSceneLoad();
+                        entry.OnSceneLoadAsync();
                     }
                 });
 
@@ -235,7 +236,7 @@ namespace nitou.SceneSystem {
 
                     // イベント処理
                     if (x.TryGetEntryPoint(out var entry)) {
-                        entry.OnSceneUnload();
+                        entry.OnSceneUnloadAsync();
                     }
                 });
 
@@ -248,10 +249,10 @@ namespace nitou.SceneSystem {
                     // イベント処理
                     ISceneEntryPoint entry;
                     if (previousScene.IsValid() && previousScene.TryGetEntryPoint(out entry)) {
-                        entry.OnSceneDeactivate();
+                        entry.OnSceneDeactivateAsync();
                     }
                     if (nextScene.TryGetEntryPoint(out entry)) {
-                        entry.OnSceneActivate();
+                        entry.OnSceneActivateAsync();
                     }
 
                     Debug_.Log($"Scene Changed : [{x.Item1.name}] => [{x.Item2.name}]", Colors.AliceBlue);
