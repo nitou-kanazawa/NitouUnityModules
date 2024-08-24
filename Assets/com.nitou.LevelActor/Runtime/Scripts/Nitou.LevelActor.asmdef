@@ -1,6 +1,6 @@
 {
     "name": "Nitou.LevelActor",
-    "rootNamespace": "Nitou.LevelActor",
+    "rootNamespace": "nitou.LevelActor",
     "references": [
         "Nitou.Lib",
         "Nitou.Modules"

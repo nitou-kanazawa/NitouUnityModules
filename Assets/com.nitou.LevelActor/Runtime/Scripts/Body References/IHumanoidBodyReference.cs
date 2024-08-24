@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Nitou.LevelActor{
+namespace nitou.LevelObjects.Humanoid {
 
     public interface IHumanoidBodyReference{
 

@@ -12,24 +12,22 @@ namespace nitou.LevelObjects.Humanoid {
     /// Humanoidのボディ参照を保持するコンポーネント
     /// </summary>
     [DisallowMultipleComponent]
-    public class HumanoidBodyReference : MonoBehaviour {
+    public class HumanoidBodyReferenceCollector : MonoBehaviour {
 
         /// ----------------------------------------------------------------------------
         #region Field
 
         [TabGroup("Hand")]
-        [SerializeField, Indent] Transform _leftHand;
-
+        [SerializeField, Indent] HandReference _leftHand;
         [TabGroup("Hand")]
-        [SerializeField, Indent] Transform _rightHand;
+        [SerializeField, Indent] HandReference _rightHand;
 
         // ----- 
 
         [TabGroup("Foot")]
-        [SerializeField, Indent] Transform _leftFoot;
-
+        [SerializeField, Indent] FootReference _leftFoot;
         [TabGroup("Foot")]
-        [SerializeField, Indent] Transform _rightFoot;
+        [SerializeField, Indent] FootReference _rightFoot;
 
         #endregion
 
@@ -37,8 +35,8 @@ namespace nitou.LevelObjects.Humanoid {
         /// ----------------------------------------------------------------------------
         // Properity
 
-        public Transform LeftHand => _leftHand;
-        public Transform RightHand => _rightHand;
+        public Transform LeftHand => _leftHand.transform;
+        public Transform RightHand => _rightHand.transform;
 
 
 
@@ -48,18 +46,18 @@ namespace nitou.LevelObjects.Humanoid {
         private void OnDrawGizmosSelected() {
             {
                 if (_rightHand != null)
-                    Gizmos.DrawWireSphere(_rightHand.position, 0.1f);
+                    Gizmos.DrawWireSphere(_rightHand.transform.position, 0.1f);
 
                 if (_leftHand != null)
-                    Gizmos.DrawWireSphere(_leftHand.position, 0.1f);
+                    Gizmos.DrawWireSphere(_leftHand.transform.position, 0.1f);
             }
 
             {
                 if (_leftFoot != null)
-                    Gizmos.DrawWireSphere(_leftFoot.position, 0.1f);
+                    Gizmos.DrawWireSphere(_leftFoot.transform.position, 0.1f);
 
                 if (_rightFoot != null)
-                    Gizmos.DrawWireSphere(_rightFoot.position, 0.1f);
+                    Gizmos.DrawWireSphere(_rightFoot.transform.position, 0.1f);
             }
         }
 #endif
