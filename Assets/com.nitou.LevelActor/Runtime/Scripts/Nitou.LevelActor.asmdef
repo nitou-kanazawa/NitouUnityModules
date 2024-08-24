@@ -1,0 +1,17 @@
+{
+    "name": "Nitou.LevelActor",
+    "rootNamespace": "Nitou.LevelActor",
+    "references": [
+        "Nitou.Lib",
+        "Nitou.Modules"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

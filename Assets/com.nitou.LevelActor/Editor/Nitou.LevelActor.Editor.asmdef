@@ -1,0 +1,20 @@
+{
+    "name": "Nitou.LevelActor.Editor",
+    "rootNamespace": "Nitou.LevelActor.EditorScripts",
+    "references": [
+        "Nitou.Lib",
+        "Nitou.Modules",
+        "Nitou.EditorScripts"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
