@@ -21,7 +21,9 @@ namespace nitou.MaterialControl.EditorScript {
         /// ----------------------------------------------------------------------------
         // EditorWindow Method 
 
-        [MenuItem(MenuItemName.Prefix.EditorWindow + "Material/Material Handler Generator")]
+        [MenuItem(
+            ToolBarMenu.Prefix.EditorWindow +"Material/Material Handler Generator"
+        )]
         public static void ShowWindow() {
             GetWindow<MaterialHandlerGenerator>("Material Handler Generator");
         }

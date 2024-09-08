@@ -9,7 +9,7 @@ namespace nitou.GameSystem {
     [CreateAssetMenu(
         fileName = "Event_Game",
         menuName = AssetMenu.Prefix.EventChannel + "Game Event",
-        order = AssetMenu.Order.First
+        order = AssetMenu.Order.Early
     )]
     public class GameEventChannel : EventChannel<GameEventData> { }
 }

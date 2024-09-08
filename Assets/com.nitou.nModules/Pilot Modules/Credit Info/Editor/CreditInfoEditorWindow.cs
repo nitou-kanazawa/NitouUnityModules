@@ -30,7 +30,7 @@ namespace nitou.Credit.Editor {
         /// ----------------------------------------------------------------------------
         // Editor Method
 
-        [MenuItem( MenuItemName.Prefix.EditorWindow + "Credit Info")]
+        [MenuItem( ToolBarMenu.Prefix.EditorWindow + "Credit Info")]
         private static void OpenWindow() => GetWindow<CreditInfoEditorWindow>().Show();
 
         protected override void OnDestroy() {
