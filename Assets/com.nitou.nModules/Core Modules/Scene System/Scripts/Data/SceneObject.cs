@@ -13,9 +13,9 @@ namespace nitou.SceneSystem {
     /// インスペクターでシーンファイルを設定できるようにするためのクラス
     /// </summary>
     [Serializable]
-    public class SceneObject {
+    public sealed class SceneObject {
 
-        [SerializeField] private string _sceneName;
+        [SerializeField] string _sceneName;
 
         // 変換
         public static implicit operator string(SceneObject sceneObject) {

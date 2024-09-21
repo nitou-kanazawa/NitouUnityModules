@@ -21,8 +21,7 @@ namespace nitou.SceneSystem {
             return Observable.FromEvent<UnityAction<Scene, Scene>, Tuple<Scene, Scene>>(
                 h => (x, y) => h(Tuple.Create(x, y)),
                 h => SceneManager.activeSceneChanged += h,
-                h => SceneManager.activeSceneChanged -= h
-                );
+                h => SceneManager.activeSceneChanged -= h);
         }
 
         /// <summary>
@@ -32,8 +31,7 @@ namespace nitou.SceneSystem {
             return Observable.FromEvent<UnityAction<Scene, LoadSceneMode>, Tuple<Scene, LoadSceneMode>>(
                 h => (x, y) => h(Tuple.Create(x, y)),
                 h => SceneManager.sceneLoaded += h,
-                h => SceneManager.sceneLoaded -= h
-            );
+                h => SceneManager.sceneLoaded -= h);
         }
 
         /// <summary>
@@ -43,8 +41,7 @@ namespace nitou.SceneSystem {
             return Observable.FromEvent<UnityAction<Scene>, Scene>(
                 h => h.Invoke,
                 h => SceneManager.sceneUnloaded += h,
-                h => SceneManager.sceneUnloaded -= h
-            );
+                h => SceneManager.sceneUnloaded -= h);
         }
     }
 }

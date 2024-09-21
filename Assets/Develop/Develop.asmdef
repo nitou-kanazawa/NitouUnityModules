@@ -1,0 +1,17 @@
+{
+    "name": "Develop",
+    "rootNamespace": "Develop",
+    "references": [
+        "GUID:14d14a38d1c9a1f43b1b739aba632d1e",
+        "GUID:dd8cd4690239d464487727ff012b3a2e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

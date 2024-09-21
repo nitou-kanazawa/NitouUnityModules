@@ -1,0 +1,10 @@
+@startuml Escape Game
+
+' クラス定義のプレースホルダー
+class Room
+class Area
+
+Room *-- Area
+
+
+@enduml

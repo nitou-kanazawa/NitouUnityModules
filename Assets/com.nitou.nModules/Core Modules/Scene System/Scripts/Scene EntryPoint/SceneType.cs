@@ -22,7 +22,7 @@ namespace nitou.SceneSystem{
 
 
     /// <summary>
-    /// <see cref="SceneType"/>を対象とした拡張メソッド
+    /// <see cref="SceneType"/>型の基本的な拡張メソッド集
     /// </summary>
     public static class SceneTypeExtensions {
 

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 namespace nitou {
 
     /// <summary>
-    /// <see cref="Scene"/>を対象とした拡張メソッド集
+    /// <see cref="Scene"/>型の基本的な拡張メソッド集
     /// </summary>
     public static class SceneExtensions {
 
