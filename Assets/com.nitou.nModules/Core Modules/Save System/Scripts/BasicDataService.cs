@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Text;
 using UnityEngine;
 
 // [éQçl]
@@ -8,7 +5,7 @@ using UnityEngine;
 
 namespace nitou.SaveSystem {
 
-    public class BasicDataService : DataServiceBase {
+    public sealed class BasicDataService : DataServiceBase {
 
         /// ----------------------------------------------------------------------------
         // Public Method
