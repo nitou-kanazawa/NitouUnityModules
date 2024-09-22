@@ -1,6 +1,6 @@
 {
     "name": "Nitou.Framwork",
-    "rootNamespace": "nitou",
+    "rootNamespace": "nitou.GameSystem",
     "references": [
         "Nitou.Lib",
         "Nitou.Modules",
