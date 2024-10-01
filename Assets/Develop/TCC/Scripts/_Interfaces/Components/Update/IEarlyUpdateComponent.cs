@@ -1,5 +1,5 @@
 
-namespace nitou.LevelActors.Interfaces.Core {
+namespace nitou.LevelActors.Interfaces.Components {
 
     /// <summary>
     /// Interface for executing components at the EarlyUpdateBrain timing.

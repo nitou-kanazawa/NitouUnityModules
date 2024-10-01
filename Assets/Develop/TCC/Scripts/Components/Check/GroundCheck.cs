@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UniRx;
 using Sirenix.OdinInspector;
@@ -10,6 +11,9 @@ namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
 
+    /// <summary>
+    /// 接地状態の検出用コンポーネント．
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class GroundCheck : MonoBehaviour,
         IEarlyUpdateComponent {
@@ -43,12 +47,9 @@ namespace nitou.LevelActors.Check {
         public IObservable<GameObject> OnGrounObjectChanged => _onGroundObjectChandedSubject;
         private readonly Subject<GameObject> _onGroundObjectChandedSubject = new();
 
-
-
         // references
         private ActorBody _actorBody;
         private ITransform _transform;
-
 
         // 内部処理用
         private readonly RaycastHit[] _hits = new RaycastHit[MAX_COLLISION_SIZE];
@@ -111,10 +112,8 @@ namespace nitou.LevelActors.Check {
         public Vector3 GroundContactPoint { get; private set; }
 
 
-
-
         /// ----------------------------------------------------------------------------
-        // MeonoBehaviour Method
+        // Lifecycle Events
 
         private void Awake() {
             GatherComponents();
@@ -123,10 +122,6 @@ namespace nitou.LevelActors.Check {
         private void OnDestroy() {
             _onGroundObjectChandedSubject.Dispose();
         }
-
-
-        /// ----------------------------------------------------------------------------
-        // Public Method
 
         void IEarlyUpdateComponent.OnUpdate(float deltaTime) {
 
@@ -173,6 +168,10 @@ namespace nitou.LevelActors.Check {
 
         }
 
+
+        /// ----------------------------------------------------------------------------
+        // Public Method
+
         /// <summary>
         /// Performs a Raycast that ignores the Collider attached to the character.
         /// This API is used, for example, to detect a step in front of the character.
@@ -205,7 +204,7 @@ namespace nitou.LevelActors.Check {
             closestHit = new RaycastHit();
             var isHit = false;
 
-            foreach (var hit in hits) {
+            foreach (var hit in hits.Take(count)) {
                 var isOverOriginHeight = (hit.distance == 0);
                 if (isOverOriginHeight || hit.distance > min || _actorBody.IsOwnCollider(hit.collider) || hit.collider == null)
                     continue;
@@ -221,7 +220,6 @@ namespace nitou.LevelActors.Check {
 
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
-
         private void Reset() {
             _ambiguousDistance = 0.2f;
         }
@@ -274,7 +272,6 @@ namespace nitou.LevelActors.Check {
             }
         }
 #endif
-
     }
 
 }
