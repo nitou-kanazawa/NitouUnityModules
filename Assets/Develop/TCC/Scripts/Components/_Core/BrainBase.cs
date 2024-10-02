@@ -1,10 +1,43 @@
 using UnityEngine;
 
-namespace nitou.LevelActors.Brain{
+namespace nitou.LevelActors.Core{
     using nitou.LevelActors.Interfaces.Components;
     using nitou.LevelActors.Interfaces.Core;
 
     public abstract class BrainBase : MonoBehaviour, ITransform {
+
+        // Manager
+        private readonly MoveManager _moveManager = new();
+        private readonly TurnManager _turnManager = new();
+
+        protected ActorSettings Settings;
+        protected Transform CachedTransform;
+
+
+
+        protected void Initialize() {
+            var go = gameObject;
+            _cameraManager.Initialize(go);
+            _updateComponentManager.Initialize(go);
+            _moveManager.Initialize(go);
+            _turnManager.Initialize(go, this);
+            _effectManager.Initialize(go);
+            _collisionManager.Initialize(go);
+
+            // gather all components.
+            TryGetComponent(out CachedTransform);
+            TryGetComponent(out Settings);
+        }
+
+
+
+
+
+
+
+
+
+
 
         protected Quaternion Rotation;
         protected Vector3 Position;
@@ -25,8 +58,9 @@ namespace nitou.LevelActors.Brain{
             }
         }
 
+
         /// ----------------------------------------------------------------------------
-        /// 
+        // 
 
 
 

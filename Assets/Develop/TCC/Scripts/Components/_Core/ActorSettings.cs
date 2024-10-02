@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 namespace nitou.LevelActors.Core{
 
     [DisallowMultipleComponent]
-    public sealed class ActorBody : MonoBehaviour{
+    public sealed class ActorSettings : MonoBehaviour{
 
         [Title("Environment Settings")]        
         [SerializeField, Indent] LayerMask _environmentLayer;

@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Sirenix.OdinInspector;
-using nitou.BachProcessor;
-using System.Collections.Generic;
 
 namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Core;
@@ -15,8 +14,7 @@ namespace nitou.LevelActors.Check {
     /// 接地状態の検出用コンポーネント．
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GroundCheck : MonoBehaviour,
-        IEarlyUpdateComponent {
+    public sealed class GroundCheck : MonoBehaviour, IEarlyUpdateComponent {
 
         [Title("Parameters")]
 
@@ -48,7 +46,7 @@ namespace nitou.LevelActors.Check {
         private readonly Subject<GameObject> _onGroundObjectChandedSubject = new();
 
         // references
-        private ActorBody _actorBody;
+        private ActorSettings _actorBody;
         private ITransform _transform;
 
         // 内部処理用
@@ -136,6 +134,7 @@ namespace nitou.LevelActors.Check {
                 origin, _actorBody.Radius, Vector3.down, _hits,
                 groundCheckDistance,
                 _actorBody.EnvironmentLayer, QueryTriggerInteraction.Ignore);
+
             var isHit = ClosestHit(_hits, groundCheckCount, groundCheckDistance, out _groundCheckHit);
 
             // fill the properties of the component based on the information of the ground.
@@ -194,7 +193,7 @@ namespace nitou.LevelActors.Check {
             }
 
             if(_actorBody == null) {
-                _actorBody = gameObject.GetComponentInParent<ActorBody>();
+                _actorBody = gameObject.GetComponentInParent<ActorSettings>();
             }
         }
 
@@ -241,7 +240,7 @@ namespace nitou.LevelActors.Check {
             }
 
             if (_actorBody == null) {
-                _actorBody = gameObject.GetComponentInParent<ActorBody>();
+                _actorBody = gameObject.GetComponentInParent<ActorSettings>();
             }
 
             var position = transform.position;

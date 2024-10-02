@@ -27,7 +27,9 @@ namespace nitou.LevelActors.Interfaces.Core {
         /// <param name="result">The class with the highest priority.</param>
         /// <typeparam name="T">A class that inherits from IPriority.</typeparam>
         /// <returns>True if the class with the highest priority is found.</returns>
-        public static bool GetHighestPriority<T>(this List<T> values, out T result) where T : class, IPriority<T> {
+        public static bool GetHighestPriority<T>(this List<T> values, out T result) 
+            where T : class, IPriority<T> {
+
             result = null;
             var highestPriority = 0;
 

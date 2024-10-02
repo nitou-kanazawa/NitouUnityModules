@@ -73,6 +73,6 @@ namespace nitou.LevelActors.Interfaces.Components {
         /// CharacterSettings values have changed
         /// </summary>
         /// <param name="settings">Changed CharacterSettings</param>
-        void OnUpdateSettings(ActorBody settings);
+        void OnUpdateSettings(ActorSettings settings);
     }
 }
