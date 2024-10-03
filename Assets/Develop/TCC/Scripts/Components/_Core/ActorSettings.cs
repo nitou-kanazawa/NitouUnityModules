@@ -18,6 +18,11 @@ namespace nitou.LevelActors.Core{
 
         [SerializeField, Indent] private Camera _camera;
 
+        /// <summary>
+        ///     Cached value of the camera's Transform.
+        /// </summary>
+        private Transform _cameraTransform;
+
         // List to store Collider components under GameObject.
         private readonly List<Collider> _hierarchyColliders = new();
 
@@ -71,6 +76,32 @@ namespace nitou.LevelActors.Core{
         /// </summary>
         public bool HasCamera => _camera != null;
 
+        /// <summary>
+        ///     MainCamera's Transform.
+        /// </summary>
+        public Transform CameraTransform {
+            get {
+                // Get the camera's Transform if already registered.
+                if (_cameraTransform != null)
+                    return _cameraTransform;
+
+                ApplyMainCameraTransform();
+
+                return _cameraTransform;
+            }
+        }
+
+
+        /// ----------------------------------------------------------------------------
+        // MonoBehaviour Method
+
+        private void Awake() {
+            // Get a list of components.
+            GatherOwnColliders();
+
+            // Update the camera's Transform.
+            ApplyMainCameraTransform();
+        }
 
         /// ----------------------------------------------------------------------------
         // Public Method
@@ -121,6 +152,17 @@ namespace nitou.LevelActors.Core{
             _hierarchyColliders.AddRange(GetComponentsInChildren<Collider>());
         }
 
+        /// <summary>
+        ///     Updates <see cref="Camera.main" /> settings for <see cref="_camera" /> and <see cref="_cameraTransform" />.
+        /// </summary>
+        private void ApplyMainCameraTransform() {
+            // Get objects with the MainCamera tag.
+            _camera = Camera.main;
+
+            // Update the CameraTransform if a camera is acquired.
+            if (_camera != null && _cameraTransform == null)
+                _cameraTransform = _camera.transform;
+        }
 
 
         /// ----------------------------------------------------------------------------

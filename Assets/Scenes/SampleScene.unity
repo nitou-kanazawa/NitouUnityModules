@@ -195,6 +195,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 4
+  _turnSpeed: 15
+  _brakePower: 12
+  _accelerator: 6
+  _angle: 45
+  _lockAxis: {x: 0, y: 0, z: 0}
+  _movePriority: 1
+  _moveStopThreshold: 0.2
+  _turnPriority: 1
+  _turnStopThreshold: 0
 --- !u!1 &158145429
 GameObject:
   m_ObjectHideFlags: 0
@@ -2330,6 +2339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b414eef5df4571b458e5bd0281d30140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _move: {fileID: 94772709}
 --- !u!1 &1998349611
 GameObject:
   m_ObjectHideFlags: 0
