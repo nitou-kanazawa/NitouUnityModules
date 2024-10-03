@@ -1,11 +1,13 @@
 using Unity.Mathematics;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using nitou.BachProcessor;
 
 namespace nitou.LevelActors.Brain {
     using nitou.LevelActors.Core;
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
+    using nitou.LevelActors.Utils;
 
     /// <summary>
     /// This brain operates using <see cref="UnityEngine.CharacterController"/>.
@@ -13,6 +15,7 @@ namespace nitou.LevelActors.Brain {
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(ActorSettings))]
     [DefaultExecutionOrder(Order.UpdateBrain)]
     public class CharacterBrain : BrainBase, ICharacterSettingUpdateReceiver {
 
@@ -24,7 +27,7 @@ namespace nitou.LevelActors.Brain {
         /// <summary>
         /// Possible to push when colliding with a Rigidbody.
         /// </summary>
-        public bool Pushable = true;
+        [SerializeField, Indent] bool _pushable = true;
 
         [DisableInPlayMode]
         [SerializeField, Indent] bool _detectCollisions = true;
@@ -73,11 +76,9 @@ namespace nitou.LevelActors.Brain {
         private IGroundContact _groundCheck;
         private bool _hasGroundCheck;
 
-        private void Reset() {
-            // Update settings such as CharacterController.
-            var settings = GetComponent<CharacterSettings>();
-            ((ICharacterSettingUpdateReceiver)this).OnUpdateSettings(settings);
-        }
+
+        /// ----------------------------------------------------------------------------
+        // MonoBehaviour Method
 
         private void Awake() {
             // Initialize the parent class.
@@ -106,15 +107,9 @@ namespace nitou.LevelActors.Brain {
             UpdateBrain();
         }
 
-
-        private void OnValidate() {
-            // Update the settings to match the Inspector for changes during gameplay.
-            SetFreezeAxis(_freezeAxis.x, _freezeAxis.y, _freezeAxis.z);
-        }
-
         private void OnControllerColliderHit(ControllerColliderHit hit) {
             // If push is disabled, do not perform pushing when colliding.
-            if (Pushable == false)
+            if (_pushable == false)
                 return;
 
             // push other character brain.
@@ -128,6 +123,8 @@ namespace nitou.LevelActors.Brain {
             var pushDir = hit.moveDirection;
             body.AddForce(pushDir * Settings.Mass, ForceMode.Force);
         }
+
+
 
         /// <summary>
         /// Gather and add a list of components used by <see cref="CharacterBrain"/>.
@@ -182,7 +179,7 @@ namespace nitou.LevelActors.Brain {
             else
                 CachedTransform.position += velocity;
 
-            CachedTransform.position = BrainUtility.LimitAxis(
+            CachedTransform.position = BrainUtil.LimitAxis(
                 Position, CachedTransform.position, _freezeAxis);
         }
 
@@ -211,7 +208,7 @@ namespace nitou.LevelActors.Brain {
         /// Callback when CharacterSettings is updated.
         /// </summary>
         /// <param name="settings">CharacterSettings.</param>
-        void ICharacterSettingUpdateReceiver.OnUpdateSettings(CharacterSettings settings) {
+        void ICharacterSettingUpdateReceiver.OnUpdateSettings(ActorSettings settings) {
             // If the Controller is not set, retrieve it.
             if (_controller == null) TryGetComponent(out _controller);
 
@@ -249,7 +246,7 @@ namespace nitou.LevelActors.Brain {
         }
 
         protected override void MovePosition(in Vector3 newPosition) {
-            var position = BrainUtility.LimitAxis(Position, newPosition, _freezeAxis);
+            var position = BrainUtil.LimitAxis(Position, newPosition, _freezeAxis);
 
             if (_controller.enabled) {
                 // Since CharacterController is enabled, it cannot be moved by Transform.
@@ -258,5 +255,20 @@ namespace nitou.LevelActors.Brain {
                 CachedTransform.position = position;
             }
         }
+
+
+        /// ----------------------------------------------------------------------------
+#if UNITY_EDITOR
+        private void Reset() {
+            // Update settings such as CharacterController.
+            var settings = GetComponent<ActorSettings>();
+            ((ICharacterSettingUpdateReceiver)this).OnUpdateSettings(settings);
+        }
+
+        private void OnValidate() {
+            // Update the settings to match the Inspector for changes during gameplay.
+            SetFreezeAxis(_freezeAxis.x, _freezeAxis.y, _freezeAxis.z);
+        }
+#endif
     }
 }

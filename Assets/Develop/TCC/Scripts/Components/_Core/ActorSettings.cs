@@ -15,6 +15,12 @@ namespace nitou.LevelActors.Core{
         [SerializeField, Indent] float _height = 1.4f;
         [SerializeField, Indent] float _radius = 0.5f;
 
+
+        [SerializeField, Indent] private Camera _camera;
+
+        // List to store Collider components under GameObject.
+        private readonly List<Collider> _hierarchyColliders = new();
+
         // íËêî
         private const float MIN_HEIGHT = 0.1f;
         private const float MIN_RADIUS = 0.1f;
@@ -22,8 +28,6 @@ namespace nitou.LevelActors.Core{
 
 
 
-        // List to store Collider components under GameObject.
-        private readonly List<Collider> _hierarchyColliders = new();
 
 
         /// ----------------------------------------------------------------------------
@@ -33,7 +37,6 @@ namespace nitou.LevelActors.Core{
         /// Layer for recognizing terrain colliders.
         /// </summary>
         public LayerMask EnvironmentLayer => _environmentLayer;
-
 
         /// <summary>
         /// îºåa
@@ -62,6 +65,12 @@ namespace nitou.LevelActors.Core{
             get => _mass;
             set => _mass = value;
         }
+
+        /// <summary>
+        ///     Returns true if a camera is set.
+        /// </summary>
+        public bool HasCamera => _camera != null;
+
 
         /// ----------------------------------------------------------------------------
         // Public Method

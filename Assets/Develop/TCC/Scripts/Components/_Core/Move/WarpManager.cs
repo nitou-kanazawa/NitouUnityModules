@@ -72,8 +72,8 @@ namespace nitou.LevelActors.Core {
         /// <param name="position">The new position, taking into account obstacles.</param>
         public void Move(Vector3 position) {
             WarpedPosition = true;
-            IsMove = true;
             Position = position;
+            IsMove = true;
         }
 
         /// <summary>
