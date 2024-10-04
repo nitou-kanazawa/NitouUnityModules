@@ -78,15 +78,15 @@ namespace nitou.LevelActors.Control{
         /// If it's 0, orientation changes immediately after stopping the movement.
         /// If it's 1, the orientation is updated until it reaches the target orientation.
         /// </summary>
-        [SerializeField, Range(0, 1)]
-        private float _turnStopThreshold = 0;
+        [Range(0, 1)]
+        [SerializeField, Indent] float _turnStopThreshold = 0;
 
         private IGroundContact _groundCheck;
         private bool _hasGroundCheck;
         private Transform _transform;
         private Vector3 _moveDirection = Vector3.forward;
         private float _currentSpeed;
-        private ActorSettings _characterSettings;
+        private ActorSettings _actorSettings;
         private IBrain _brain;
         private Vector2 _inputValue;
         private bool _hasInput;
@@ -160,6 +160,9 @@ namespace nitou.LevelActors.Control{
             set => _moveSpeed = value;
         }
 
+        /// <summary>
+        /// ˆÚ“®•ûŒü‚Ì•Ï‰»—Ê (degree)
+        /// </summary>
         public float DeltaDirectionAngle => Vector3.SignedAngle(_transform.forward, _moveDirection, Vector3.up);
 
         /// <summary>.
@@ -185,14 +188,14 @@ namespace nitou.LevelActors.Control{
         /// </summary>
         public bool IsMove { get; private set; }
 
-
-
-
-
+        /// <summary>
+        /// 
+        /// </summary>
         float ITurn.YawAngle => _yawAngle;
 
-        public int Priority => throw new System.NotImplementedException();
-
+        /// <summary>
+        /// 
+        /// </summary>
         int IUpdateComponent.Order => Order.Control;
 
 
@@ -219,10 +222,13 @@ namespace nitou.LevelActors.Control{
         // MeonoBehaviour Method
 
         private void Awake() {
-            _characterSettings = gameObject.GetComponentInParent<ActorSettings>();
-            _transform = _characterSettings.GetComponent<Transform>();
-            _brain = _characterSettings.GetComponent<IBrain>();
-            _hasGroundCheck = _characterSettings.TryGetComponent(out _groundCheck);
+            // 
+            _actorSettings = gameObject.GetComponentInParent<ActorSettings>();
+            
+            // 
+            _transform = _actorSettings.GetComponent<Transform>();
+            _brain = _actorSettings.GetComponent<IBrain>();
+            _hasGroundCheck = _actorSettings.TryGetComponent(out _groundCheck);
         }
 
         private void OnDestroy() {
@@ -234,7 +240,7 @@ namespace nitou.LevelActors.Control{
 
             if (_hasInput) {
                 var preDirection = _moveDirection;
-                var cameraYawRotation = Quaternion.AngleAxis(_characterSettings.CameraTransform.rotation.eulerAngles.y, Vector3.up);
+                var cameraYawRotation = Quaternion.AngleAxis(_actorSettings.CameraTransform.rotation.eulerAngles.y, Vector3.up);
                 var direction = new Vector3(_inputValue.x, 0, _inputValue.y);
 
                 // Determines direction of movement according to camera orientation
@@ -261,6 +267,7 @@ namespace nitou.LevelActors.Control{
             normal = Vector3.Angle(Vector3.up, normal) < _angle ? normal : Vector3.up;
             Direction = Vector3.ProjectOnPlane(_moveDirection, normal);
 
+            //
             MoveVelocity = Direction * _currentSpeed;
             IsMove = _currentSpeed > _moveStopThreshold;
             _isTurning = Vector3.Angle(_transform.forward, _moveDirection) > (1 - _turnStopThreshold) * 360;
@@ -280,30 +287,25 @@ namespace nitou.LevelActors.Control{
             _hasInput = leftStick.sqrMagnitude > 0;
         }
 
+
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
-        private void Reset() {
-        }
 
         private void OnDrawGizmosSelected() {
+
             var offset = new Vector3(0, 0.1f, 0);
-            Gizmos.color = Color.green;
             var position = transform.position + offset;
 
             // show lines when use Lock Axis.
             if (IsLockAxis) {
-                var size = 0.2f;
+                var size = Vector3.one * 0.2f;
                 var p1 = position + _lockAxis * 5;
                 var p2 = position - _lockAxis * 5;
 
-                var green = Color.green;
-                green.a = 0.4f;
-                Gizmos.color = green;
-                Gizmos.DrawCube(p1, new Vector3(size, size, size));
-                Gizmos.DrawCube(p2, new Vector3(size, size, size));
-
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(p1, p2);
+                var color = Colors.Green.WithAlpha(0.2f);
+                Gizmos_.DrawCube(p1, size, color);
+                Gizmos_.DrawCube(p2, size, color);
+                Gizmos_.DrawLine(p1, p2, Colors.Green);
             }
 
             // show line about Move velocities.
@@ -313,4 +315,40 @@ namespace nitou.LevelActors.Control{
 
 #endif
     }
+}
+
+
+namespace nitou {
+
+    public static class ColorExtensions {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Color WithRed(this Color color, float red) {
+            return new Color(red, color.g, color.b, color.a);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Color WithGreen(this Color color, float green) {
+            return new Color(color.r, green, color.b, color.a);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Color WithBlue(this Color color, float blue) {
+            return new Color(color.r, color.g, blue, color.a);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Color WithAlpha(this Color color, float alpha) {
+            return new Color(color.r, color.g, color.b, alpha);
+        }
+    }
+
 }

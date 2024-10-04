@@ -26,9 +26,8 @@ namespace nitou.LevelActors.Core {
         /// <summary>
         /// Initialize the MoveManager.
         /// </summary>
-        /// <param name="obj"></param>
         public void Initialize(GameObject obj) {
-            obj.GetComponents(_moves);
+            obj.GetComponentsInChildren(_moves);
 
         }
 

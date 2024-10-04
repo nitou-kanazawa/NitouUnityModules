@@ -7,8 +7,15 @@ namespace nitou.LevelActors.Core {
 
         private readonly List<Collider> _ownColliders = new();        // Own collider (collider to be ignored when determining movement)
 
+
+        /// ----------------------------------------------------------------------------
+        // Public Method
+
+        /// <summary>
+        /// ‰Šú‰»ˆ—
+        /// </summary>
         public void Initialize(GameObject obj) {
-            obj.GetComponents(_ownColliders);
+            obj.GetComponentsInChildren(_ownColliders);
 
             IgnoreChildColliders(obj, true);
         }

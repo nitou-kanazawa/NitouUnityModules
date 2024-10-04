@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using nitou.Pooling;
 
 namespace nitou.LevelActors.Core{
+    using nitou.LevelActors.Interfaces.Components;
 
     [DisallowMultipleComponent]
     public sealed class ActorSettings : MonoBehaviour{
@@ -15,12 +17,8 @@ namespace nitou.LevelActors.Core{
         [SerializeField, Indent] float _height = 1.4f;
         [SerializeField, Indent] float _radius = 0.5f;
 
-
-        [SerializeField, Indent] private Camera _camera;
-
-        /// <summary>
-        ///     Cached value of the camera's Transform.
-        /// </summary>
+        // Camera
+        private Camera _camera;
         private Transform _cameraTransform;
 
         // List to store Collider components under GameObject.
@@ -77,6 +75,27 @@ namespace nitou.LevelActors.Core{
         public bool HasCamera => _camera != null;
 
         /// <summary>
+        ///     Gets character's camera information.
+        ///     Uses Camera.Main if no camera is set.
+        /// </summary>
+        public Camera CameraMain {
+            get {
+                // Return the cached camera if it's already registered.
+                if (_camera != null)
+                    return _camera;
+
+                ApplyMainCameraTransform();
+                return _camera;
+            }
+
+            set {
+                // Update the camera and _cameraTransform.
+                _camera = value;
+                _cameraTransform = _camera != null ? _camera.transform : null;
+            }
+        }
+
+        /// <summary>
         ///     MainCamera's Transform.
         /// </summary>
         public Transform CameraTransform {
@@ -92,6 +111,7 @@ namespace nitou.LevelActors.Core{
         }
 
 
+
         /// ----------------------------------------------------------------------------
         // MonoBehaviour Method
 
@@ -102,6 +122,19 @@ namespace nitou.LevelActors.Core{
             // Update the camera's Transform.
             ApplyMainCameraTransform();
         }
+
+        /// <summary>
+        ///     Callback when the component's values change.
+        /// </summary>
+        private void OnValidate() {
+            // Ensure values don't go below the minimum.
+            _height = Mathf.Max(MIN_HEIGHT, _height);
+            _radius = Mathf.Max(MIN_RADIUS, _radius);
+            _mass = Mathf.Max(MIN_MASS, _mass);
+
+            UpdateSettings();
+        }
+
 
         /// ----------------------------------------------------------------------------
         // Public Method
@@ -164,13 +197,25 @@ namespace nitou.LevelActors.Core{
                 _cameraTransform = _camera.transform;
         }
 
+        /// <summary>
+        ///     Updates components with <see cref="ICharacterSettingUpdateReceiver" />.
+        /// </summary>
+        private void UpdateSettings() {
+            var controls = ListPool<ICharacterSettingUpdateReceiver>.New();
+
+            GetComponents(controls);
+            foreach (var control in controls)
+                control.OnUpdateSettings(this);
+
+            ListPool<ICharacterSettingUpdateReceiver>.Free(controls);
+        }
+
 
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
         private void Reset() {
             _environmentLayer = LayerMaskUtil.OnlyDefault();
         }
-
 #endif
 
     }

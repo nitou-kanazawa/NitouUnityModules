@@ -6,7 +6,7 @@ public class TestPlayer : MonoBehaviour
 {
     [SerializeField] MoveControl _move;
 
-
+    
     private void OnMove(InputValue value) {
         // MoveAction‚Ì“ü—Í’l‚ðŽæ“¾
         var axis = value.Get<Vector2>();
@@ -17,5 +17,12 @@ public class TestPlayer : MonoBehaviour
         Debug.Log(velocity);
         _move.Move(velocity);
     }
+    
+
+    //private void Update() {
+    //    var velociy = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+
+    //    _move.Move(velociy);
+    //}
 
 }

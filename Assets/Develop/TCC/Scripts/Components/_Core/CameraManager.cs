@@ -9,10 +9,16 @@ namespace nitou.LevelActors.Core {
         private readonly List<ICameraUpdate> _cameraUpdates = new();  // List of Camera Control Components
 
 
+        /// <summary>
+        /// ‰Šú‰»ˆ—
+        /// </summary>
         public void Initialize(GameObject obj) {
-            obj.GetComponents(_cameraUpdates);
+            obj.GetComponentsInChildren(_cameraUpdates);
         }
 
+        /// <summary>
+        /// XVˆ—
+        /// </summary>
         public void Process(float deltaTime) {
             using var _ = new ProfilerScope("Camera Update");
 

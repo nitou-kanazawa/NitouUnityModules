@@ -15,15 +15,21 @@ namespace nitou.LevelActors.Core {
         // Public Method
 
         public void Initialize(GameObject obj) {
-            obj.GetComponents(_components);
+            obj.GetComponentsInChildren(_components);
         }
 
+        /// <summary>
+        /// 速度を計算する
+        /// </summary>
         public void CalculateVelocity() {
             using var _ = new ProfilerScope("Velocity Calculation");
             SumVelocities(_components, out var velocity);
             Velocity = velocity;
         }
-
+        
+        /// <summary>
+        /// 速度をリセットする
+        /// </summary>
         public void ResetVelocity() {
             foreach (var effect in _components)
                 effect.ResetVelocity();

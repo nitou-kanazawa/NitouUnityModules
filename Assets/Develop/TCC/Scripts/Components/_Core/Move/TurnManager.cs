@@ -47,7 +47,7 @@ namespace nitou.LevelActors.Core {
         /// <param name="transform">The object's transform.</param>
         public void Initialize(GameObject obj, ITransform transform) {
             _transform = transform;
-            obj.GetComponents(_turns);
+            obj.GetComponentsInChildren(_turns);
         }
 
         /// <summary>
