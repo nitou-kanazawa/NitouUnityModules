@@ -8,6 +8,7 @@ namespace nitou.BachProcessor{
         int Order { get; }
     }
 
+
     public interface IEarlyUpdate : ISystemBase {
         void OnUpdate();
     }

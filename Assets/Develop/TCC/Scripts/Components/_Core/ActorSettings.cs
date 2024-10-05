@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using nitou.Pooling;
+using nitou.DesignPattern.Pooling;
 
 namespace nitou.LevelActors.Core{
     using nitou.LevelActors.Interfaces.Components;
@@ -28,9 +28,6 @@ namespace nitou.LevelActors.Core{
         private const float MIN_HEIGHT = 0.1f;
         private const float MIN_RADIUS = 0.1f;
         private const float MIN_MASS = 0.001f;
-
-
-
 
 
         /// ----------------------------------------------------------------------------

@@ -13,7 +13,7 @@ namespace nitou.BachProcessor {
         where TSystem : SystemBase<TComponent, TSystem> {
 
         /// <summary>
-        /// List of registered components.
+        /// 対象コンポーネントのリスト
         /// </summary>
         protected List<TComponent> Components { get; private set; } = new();
 
@@ -51,7 +51,7 @@ namespace nitou.BachProcessor {
         // Protected MEthod
 
         /// <summary>
-        /// Unregister components
+        /// 全てのコンポーネントを登録解除する
         /// </summary>
         protected void UnregisterAllComponents() {
             // Unregister all components.
@@ -59,9 +59,11 @@ namespace nitou.BachProcessor {
             foreach (var component in components) {
                 SystemBase<TComponent, TSystem> .Unregister(component, Timing);
             }
-
         }
 
+        /// <summary>
+        /// システムのインスタンス生成時のコールバック
+        /// </summary>
         protected override void OnCreate(UpdateTiming timing) {
             // register callbacks. e.g. EarlyUpdate, PostUpdate.
             GameControllerManager.Register(this, timing);

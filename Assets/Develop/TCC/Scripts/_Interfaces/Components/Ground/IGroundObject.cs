@@ -1,31 +1,31 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace nitou.LevelActors.Interfaces{
+namespace nitou.LevelActors.Interfaces.Components{
 
     /// <summary>
-    /// Interface for accessing information about ground objects.
+    /// 地面オブジェクトに関する情報にアクセスするためのインターフェース.
     /// </summary>
     public interface IGroundObject{
 
         /// <summary>
-        /// True when the grounded GameObject has changed.
+        /// 地面オブジェクトが変化したときに true を返す.
         /// </summary>
         bool IsChangeGroundObject { get; }
         
         /// <summary>
-        /// Currently recognized ground GameObject.
+        /// 現在の地面オブジェクト.
         /// </summary>
         GameObject GroundObject { get; }
         
         /// <summary>
-        /// Currently recognized ground Collider.
+        /// 現在の地面コライダー.
         /// </summary>
         Collider GroundCollider { get; }
-        
+
         /// <summary>
-        /// Callback when the ground object changes.
+        /// 地面オブジェクトの変化を通知するストリーム.
         /// </summary>
-        UnityEvent<GameObject> OnChangeGroundObject { get; }
+        IObservable<GameObject> OnGrounObjectChanged { get; }
     }
 }

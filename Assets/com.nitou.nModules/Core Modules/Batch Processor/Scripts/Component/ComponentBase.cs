@@ -3,32 +3,28 @@ using UnityEngine;
 namespace nitou.BachProcessor{
 
     /// <summary>
-    /// Base class for components that perform batch processing.
+    /// バッチ処理対象のコンポーネント基底クラス．
     /// Register this class with a class that inherits from <see cref="SystemBase{TComponent, TSystem}"/> for usage.
     /// </summary>
     public abstract class ComponentBase : MonoBehaviour, IComponentIndex{
 
-        /// <summary>
-        /// Index of the component during batch processing.
-        /// </summary>
         protected int Index { get; private set; } = -1;
-
-        /// <summary>
-        /// True if the component is registered.
-        /// </summary>
         protected bool IsRegistered => Index != -1;
 
 
         /// ----------------------------------------------------------------------------
         // Interface
 
+        /// <summary>
+        /// Index of the component during batch processing.
+        /// </summary>
         int IComponentIndex.Index{
             get => Index;
             set => Index = value;
         }
 
         /// <summary>
-        /// 登録済みかどうか
+        /// システムへ登録済みかどうか
         /// </summary>
         bool IComponentIndex.IsRegistered => IsRegistered;
     }

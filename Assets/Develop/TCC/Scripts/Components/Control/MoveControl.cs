@@ -243,6 +243,7 @@ namespace nitou.LevelActors.Control{
                 var cameraYawRotation = Quaternion.AngleAxis(_actorSettings.CameraTransform.rotation.eulerAngles.y, Vector3.up);
                 var direction = new Vector3(_inputValue.x, 0, _inputValue.y);
 
+
                 // Determines direction of movement according to camera orientation
                 _moveDirection = cameraYawRotation * direction.normalized;
 
@@ -317,38 +318,3 @@ namespace nitou.LevelActors.Control{
     }
 }
 
-
-namespace nitou {
-
-    public static class ColorExtensions {
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Color WithRed(this Color color, float red) {
-            return new Color(red, color.g, color.b, color.a);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Color WithGreen(this Color color, float green) {
-            return new Color(color.r, green, color.b, color.a);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Color WithBlue(this Color color, float blue) {
-            return new Color(color.r, color.g, blue, color.a);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Color WithAlpha(this Color color, float alpha) {
-            return new Color(color.r, color.g, color.b, alpha);
-        }
-    }
-
-}

@@ -11,39 +11,40 @@ namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Interfaces.Components;
 
     /// <summary>
-    /// 接地状態の検出用コンポーネント．
+    /// 地面との衝突検出コンポーネント.地面が存在するかどうかや接触している面の向きなど,
+    /// 接触しているオブジェクトに関する情報を判断し、地面オブジェクトの変化を通知する.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GroundCheck : MonoBehaviour, IEarlyUpdateComponent {
+    public sealed class GroundCheck : MonoBehaviour, 
+        IGroundContact,
+        IGroundObject,
+        IEarlyUpdateComponent {
 
         [Title("Parameters")]
 
         /// <summary>
-        /// The maximum distance at which the character can be recognized as being on the ground.
-        /// This distance is used for ambiguous ground detection.
+        /// 地面にいると認識される最大距離．(大まかな地面検出用）
         /// </summary>
         [PropertyRange(0, 2f)]
         [SerializeField, Indent] float _ambiguousDistance = 0.2f;
 
         /// <summary>
-        /// The distance at which the character can be recognized as being on the ground.
-        /// This distance is used for strict ground detection.
+        /// 地面にいると認識される距離．(厳密な地面検出用）
         /// </summary>
         [PropertyRange(0, 0.5f)]
         [SerializeField, Indent] float _preciseDistance = 0.02f;
 
         /// <summary>
-        /// This is the maximum slope at which the ground is recognized as "ground".
-        /// If the slope of the nearest ground is greater than this angle, IsGround will be set to false.
+        /// 地面と認識される最大傾斜角度．
+        /// 最も近い地面の傾斜がこの角度を超える場合、IsGroundはfalseになる
         /// </summary>
         [PropertyRange(0, 90)]
         [SerializeField, Indent] int _maxSlope = 60;
 
         /// <summary>
-        /// 
+        /// 地面オブジェクトが変化したときのイベント通知
         /// </summary>
         public IObservable<GameObject> OnGrounObjectChanged => _onGroundObjectChandedSubject;
-        private readonly Subject<GameObject> _onGroundObjectChandedSubject = new();
 
         // references
         private ActorSettings _actorBody;
@@ -52,6 +53,7 @@ namespace nitou.LevelActors.Check {
         // 内部処理用
         private readonly RaycastHit[] _hits = new RaycastHit[MAX_COLLISION_SIZE];
         private RaycastHit _groundCheckHit;
+        private readonly Subject<GameObject> _onGroundObjectChandedSubject = new();
 
         // 定数
         private const int MAX_COLLISION_SIZE = 5;
@@ -63,51 +65,54 @@ namespace nitou.LevelActors.Check {
         int IEarlyUpdateComponent.Order => Order.Check;
 
         /// <summary>
-        /// This checks for ground detection.
-        /// Returns true if there is a collider within range.
-        /// This calculation result used when you want to avoid small fluctuations in ground detection, such as for between Animator state.
+        /// 接地状態の大まかな判定．
+        /// 範囲内にコライダーがある場合はtrueを返す．
+        /// この計算結果は、アニメーターの状態間などで地面検出の微小な変動を避けたいときに使用される．
         /// </summary>
-        [ShowInInspector, ReadOnly]
         public bool IsOnGround { get; private set; }
 
         /// <summary>
-        /// Returns true if the character is in contact with the ground.
-        /// This property is stricter than IsGrounded. This property is mainly used for positioning the character.
+        /// 接地状態の厳密な判定．
+        /// アクターの位置決めに使用される．
         /// </summary>
         public bool IsFirmlyOnGround { get; private set; }
+
+
+        /// <summary>
+        /// 地面オブジェクト. 
+        /// 接地していない場合はnullを返す．
+        /// </summary>
+        public GameObject GroundObject { get; private set; } = null;
+
+        /// <summary>
+        /// 現在の地面コライダー．
+        /// 接地していない場合はnullを返す．
+        /// </summary>
+        public Collider GroundCollider { get; private set; } = null;
+
+        /// <summary>
+        /// 地面までの距離．
+        /// 接地していない場合は最大距離を返す．
+        /// </summary>
+        public float DistanceFromGround { get; private set; }
+
+        /// <summary>
+        /// 地面の法線ベクトル．
+        /// 接地していない場合はVector3.Upを返す．
+        /// </summary>
+        public Vector3 GroundSurfaceNormal { get; private set; } = Vector3.up;
+
+        /// <summary>
+        /// 地面との接地位置．
+        /// 接地していない場合はVector3.Zeroを返す．
+        /// </summary>
+        public Vector3 GroundContactPoint { get; private set; }
+
 
         /// <summary>
         /// 現在フレームで地面オブジェクトが切り替わったかどうか
         /// </summary>
         public bool IsChangeGroundObject { get; private set; } = false;
-
-
-        /// <summary>
-        /// 地面オブジェクト. (※非接地時はnull)
-        /// </summary>
-        public GameObject GroundObject { get; private set; } = null;
-
-        /// <summary>
-        /// Returns the current ground collider. If the object is not grounded, returns null.
-        /// </summary>
-        public Collider GroundCollider { get; private set; } = null;
-
-        /// <summary>
-        /// Get the distance to the ground.
-        /// If not grounded, return the maximum distance.
-        /// </summary>
-        public float DistanceFromGround { get; private set; }
-
-        /// <summary>
-        /// Returns the orientation of the ground surface. If not grounded, it returns Vector3.Up.
-        /// </summary>
-        public Vector3 GroundSurfaceNormal { get; private set; } = Vector3.up;
-
-        /// <summary>
-        /// Get the grounded position.
-        /// If not grounded, return Vector3.Zero.
-        /// </summary>
-        public Vector3 GroundContactPoint { get; private set; }
 
 
         /// ----------------------------------------------------------------------------
@@ -172,9 +177,13 @@ namespace nitou.LevelActors.Check {
         // Public Method
 
         /// <summary>
-        /// Performs a Raycast that ignores the Collider attached to the character.
-        /// This API is used, for example, to detect a step in front of the character.
+        /// アクター自身にアタッチされているコライダーを無視してRaycastを実行する．
+        /// このAPIは例えばキャラクターの前方にある段差を検出するために使用される．
         /// </summary>
+        /// <param name="position">開始位置。</param>
+        /// <param name="distance">レイの範囲。</param>
+        /// <param name="hit">ヒットしたRaycastHitを返します。</param>
+        /// <returns>コライダーにヒットした場合はtrueを返します。</returns>
         public bool Raycast(Vector3 position, float distance, out RaycastHit hit) {
             var groundCheckCount = Physics.RaycastNonAlloc(position, Vector3.down, _hits, distance,
                 _actorBody.EnvironmentLayer, QueryTriggerInteraction.Ignore);
@@ -189,11 +198,11 @@ namespace nitou.LevelActors.Check {
 
         private void GatherComponents() {
             if(_transform == null) {
-                _transform = gameObject.GetComponentInParent<ITransform>();
+                _transform = this.GetComponentInParent<ITransform>();
             }
 
             if(_actorBody == null) {
-                _actorBody = gameObject.GetComponentInParent<ActorSettings>();
+                _actorBody = this.GetComponentInParent<ActorSettings>();
             }
         }
 
@@ -220,7 +229,7 @@ namespace nitou.LevelActors.Check {
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
         private void Reset() {
-            _ambiguousDistance = 0.2f;
+            _ambiguousDistance = GetComponentInParent<ActorSettings>().Height * 0.35f;
         }
 
         private void OnDrawGizmosSelected() {

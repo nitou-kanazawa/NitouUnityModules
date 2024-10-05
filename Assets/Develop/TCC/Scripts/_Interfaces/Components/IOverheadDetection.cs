@@ -11,7 +11,7 @@ namespace nitou.LevelActors.Interfaces.Components{
     public interface IOverheadDetection{
 
         /// <summary>
-        /// Return True if any object is in contact with the head.
+        /// 頭上のコンタクトがあるかどうか
         /// </summary>
         bool IsHeadContact { get;  }
 
@@ -28,10 +28,9 @@ namespace nitou.LevelActors.Interfaces.Components{
         GameObject ContactedObject { get;  }
         
         /// <summary>
-        /// Point of contact.
+        /// コンタクト位置．
         /// If no contact is made, the maximum distance at which contact can be made.
         /// </summary>
         Vector3 ContactPoint { get; }
-        
     }
 }

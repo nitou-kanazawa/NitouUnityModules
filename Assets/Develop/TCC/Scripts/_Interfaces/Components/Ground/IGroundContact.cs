@@ -3,34 +3,33 @@ using UnityEngine;
 namespace nitou.LevelActors.Interfaces.Components{
 
     /// <summary>
-    /// Interface for accessing components that determine whether the character is in contact with the ground.
+    /// アクターが地面に接触しているかどうかを判断するコンポーネントにアクセスするためのインターフェース.
     /// </summary>
     public interface IGroundContact {
 
         /// <summary>
-        /// True if in contact with the ground.
-        /// This grounding detection uses ambiguous criteria.
+        /// 接地状態かの判定. 
+        /// ※着地時の事前判定などに用いる大まかな判定
         /// </summary>
         bool IsOnGround { get; }
         
         /// <summary>
-        /// True if strictly in contact with the ground.
-        /// This grounding detection uses strict criteria.
+        /// 接地状態かの厳密な判定.
         /// </summary>
         bool IsFirmlyOnGround { get; }
         
         /// <summary>
-        /// Relative distance from the ground.
+        /// 地面からの相対的な距離.
         /// </summary>
         float DistanceFromGround { get; }
         
         /// <summary>
-        /// Normal vector of the current ground.
+        /// 現在の地面の法線ベクトル.
         /// </summary>
         Vector3 GroundSurfaceNormal { get; }
         
         /// <summary>
-        /// Point where contact with the ground is made.
+        /// 地面と接している点.
         /// </summary>
         Vector3 GroundContactPoint { get; }
     }

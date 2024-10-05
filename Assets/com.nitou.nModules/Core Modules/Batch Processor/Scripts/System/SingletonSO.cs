@@ -16,21 +16,17 @@ namespace nitou.DesignPattern {
         private static T _instance;
 
         /// <summary>
-        /// Returns True if the object has been created.
-        /// Note: When accessing the component at a time when it might be destroyed, like OnDestroy, always check for the existence of the object.
+        /// インスタンスが生成済みかどうか.
+        /// [NOTE] When accessing the component at a time when it might be destroyed, like OnDestroy, always check for the existence of the object.
         /// </summary>
         protected static bool IsCreated => _instance != null;
-
-
-        /// ----------------------------------------------------------------------------
 
         /// <summary>
         /// Get the instance. If the instance has not been created, it will be instantiated and registered.
         /// </summary>
         protected static T Instance {
             get {
-                if (_instance != null)
-                    return _instance;
+                if (_instance != null) return _instance;
 
                 // create instance and register callback.
                 // ScriptableObject is not automatically destroyed in EnterPlayMode,
@@ -42,8 +38,11 @@ namespace nitou.DesignPattern {
             }
         }
 
+
+        /// ----------------------------------------------------------------------------
+
         /// <summary>
-        /// Callback for when the game is quitting.
+        /// アプリケーション終了時の処理
         /// </summary>
         private void OnQuit() {
             Application.quitting -= OnQuit;

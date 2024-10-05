@@ -4,7 +4,7 @@ using UnityEngine.Playables;
 namespace nitou.BachProcessor {
 
     /// <summary>
-    /// Timing of updates.
+    /// 更新タイミング
     /// </summary>
     public enum UpdateTiming : int {
         Update = 0,
@@ -12,23 +12,21 @@ namespace nitou.BachProcessor {
         LateUpdate = 2,
     }
 
+
     /// <summary>
+    /// 
     /// </summary>
     public abstract class UpdateTimingSingletonSO<TSystem> : ScriptableObject
         where TSystem : UpdateTimingSingletonSO<TSystem> {
 
         /// <summary>
-        /// To support FixedUpdate and Update, it holds multiple instances.
-        /// It should have the same size as <see cref="UpdateTiming"/>.
+        /// <see cref="UpdateTiming"/>の各タイミングをサポートするためのインスタンス
         /// </summary>
         private static readonly TSystem[] Instance = new TSystem[3];
 
         /// <summary>
-        /// Check if an object exists.
-        /// Unlike GetInstance, this does not create an instance.
+        /// インスタンスが生成済みか確認する　（※生成はしない）
         /// </summary>
-        /// <param name="timing">Timing of update</param>
-        /// <returns>True if an instance has been created</returns>
         public static bool IsCreated(UpdateTiming timing) => Instance[(int)timing] != null;
 
         /// <summary>
@@ -49,6 +47,7 @@ namespace nitou.BachProcessor {
 
             return instance;
         }
+
 
         // ----- 
 
