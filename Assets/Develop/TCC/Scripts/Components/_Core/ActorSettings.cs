@@ -108,7 +108,6 @@ namespace nitou.LevelActors.Core{
         }
 
 
-
         /// ----------------------------------------------------------------------------
         // MonoBehaviour Method
 

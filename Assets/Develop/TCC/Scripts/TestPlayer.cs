@@ -6,6 +6,7 @@ using nitou.LevelActors.Control;
 public class TestPlayer : MonoBehaviour
 {
     [SerializeField] MoveControl _move;
+    [SerializeField] Animator _animator;
 
     
     private void OnMove(InputValue value) {
@@ -18,7 +19,12 @@ public class TestPlayer : MonoBehaviour
         //Debug_.Log($"input : {velocity}", Colors.Orange);
         _move.Move(axis);
     }
-    
+
+
+
+    private void Update() {
+        _animator.SetFloat("Speed", _move.CurrentSpeed);
+    }
 
     //private void Update() {
     //    var velociy = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));

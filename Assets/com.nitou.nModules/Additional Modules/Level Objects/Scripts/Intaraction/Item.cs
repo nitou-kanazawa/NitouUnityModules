@@ -18,7 +18,7 @@ namespace nitou.LevelObjects{
         }
 
         private void OnTriggerEnter(Collider other) {
-            Debug.Log("Enter");
+            //Debug.Log("Enter");
             _meshRenderer.material.color = Color.red;
         }
 

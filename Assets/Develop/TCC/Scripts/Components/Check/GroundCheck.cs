@@ -108,7 +108,6 @@ namespace nitou.LevelActors.Check {
         /// </summary>
         public Vector3 GroundContactPoint { get; private set; }
 
-
         /// <summary>
         /// 現在フレームで地面オブジェクトが切り替わったかどうか
         /// </summary>
