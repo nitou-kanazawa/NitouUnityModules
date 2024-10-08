@@ -15,18 +15,20 @@
       "hash": "6baeccf6c544c155497164327cca72f28163a578"
     },
     "com.nitou.nlib": {
-      "version": "file:C:/Users/nitou/OneDrive/ドキュメント/SouceTree_repository/NitouLib/Assets/com.nitou.nLib",
+      "version": "https://github.com/nitou-kanazawa/NitouUnityLib.git?path=Assets/com.nitou.nLib",
       "depth": 0,
-      "source": "local",
+      "source": "git",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0"
-      }
+      },
+      "hash": "3a574b144aced443a549043dfae13c699bc55f4f"
     },
     "com.nitou.ntools": {
-      "version": "file:C:/Users/nitou/OneDrive/ドキュメント/SouceTree_repository/NitouLib/Assets/com.nitou.nTools",
+      "version": "https://github.com/nitou-kanazawa/NitouUnityLib.git?path=Assets/com.nitou.nTools",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "3a574b144aced443a549043dfae13c699bc55f4f"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.0",
