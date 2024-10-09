@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9057452c86079e4265228480b1439442894d5078"
+      "hash": "f9fd769be7c634610f2a61aa914a1a55f34740e1"
     },
     "com.neuecc.unirx": {
       "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
@@ -21,14 +21,14 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0"
       },
-      "hash": "3a574b144aced443a549043dfae13c699bc55f4f"
+      "hash": "ed71bc60194b6b8e6d6dc65a1e63523a8143a85e"
     },
     "com.nitou.ntools": {
       "version": "https://github.com/nitou-kanazawa/NitouUnityLib.git?path=Assets/com.nitou.nTools",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3a574b144aced443a549043dfae13c699bc55f4f"
+      "hash": "ed71bc60194b6b8e6d6dc65a1e63523a8143a85e"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.0",

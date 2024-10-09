@@ -9,12 +9,17 @@ namespace nitou.Audio {
     /// </summary>
     public class ResourcesAudioClipContainer {
 
+        // 
         private readonly Dictionary<string, AudioClip> _bgmDic;
         private readonly Dictionary<string, AudioClip> _seDic;
 
+        // パス
         private const string BGM_PATH = "Audio/BGM";
         private const string SE_PATH = "Audio/SE";
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public ResourcesAudioClipContainer() {
 
             // リソースフォルダから全SE&BGMのファイルを読み込みセット
