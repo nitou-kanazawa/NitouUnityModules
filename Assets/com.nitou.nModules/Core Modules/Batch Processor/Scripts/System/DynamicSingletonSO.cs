@@ -11,7 +11,7 @@ namespace nitou.DesignPattern {
     /// <summary>
     /// Creates a ScriptableObject as a singleton.
     /// </summary>
-    public class SingletonSO<T> : ScriptableObject where T : SingletonSO<T> {
+    public class DynamicSingletonSO<T> : ScriptableObject where T : DynamicSingletonSO<T> {
 
         private static T _instance;
 
