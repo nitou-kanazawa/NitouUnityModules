@@ -27,12 +27,12 @@ namespace nitou.Settings {
         /// ----------------------------------------------------------------------------
 
         [Title(" ")]
-        public bool executeAppLauncher;
-        public string text;
+        [Indent] public bool executeAppLauncher;
+        [Indent] public string text;
 
         [Title("UI")]
 
-        public bool s;
+        [Indent] public bool s;
 
         [SerializeField] Vector2 _referenceResolution = new Vector2(1920, 1080);
         
