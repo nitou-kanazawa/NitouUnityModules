@@ -21,17 +21,17 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0"
       },
-      "hash": "9acf2473b1a02b04cd4fd29bab26b4e25d69402d"
+      "hash": "728989a060d4fe957f697e363b85c94fb0766661"
     },
     "com.nitou.ntools": {
       "version": "https://github.com/nitou-kanazawa/NitouUnityLib.git?path=Assets/com.nitou.nTools",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ed71bc60194b6b8e6d6dc65a1e63523a8143a85e"
+      "hash": "728989a060d4fe957f697e363b85c94fb0766661"
     },
     "com.unity.ai.navigation": {
-      "version": "2.0.0",
+      "version": "2.0.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -50,11 +50,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "3.1.1",
+      "version": "3.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.splines": "2.0.0"
+        "com.unity.splines": "2.0.0",
+        "com.unity.test-framework": "1.1.33"
       },
       "url": "https://packages.unity.com"
     },
@@ -213,7 +214,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.4.4",
+      "version": "1.4.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -234,7 +235,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.8.6",
+      "version": "1.8.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {

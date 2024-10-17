@@ -139,8 +139,8 @@ namespace nitou.LevelActors {
             var pos = transform.position + _offset;
 
             // Circle
-            //Gizmos_.DrawWireCircle(pos, _radius * 0.4f, Colors.Gray);
-            //Gizmos_.DrawWireCircle(pos, _radius * 0.8f, Colors.Gray);
+            Gizmos_.DrawWireCircle(pos, _radius * 0.4f, Colors.Gray);
+            Gizmos_.DrawWireCircle(pos, _radius * 0.8f, Colors.Gray);
 
             // Vectors
             Gizmos_.DrawRayArrow(pos, MovementReferenceForward * _radius, Colors.DeepSkyBlue);
