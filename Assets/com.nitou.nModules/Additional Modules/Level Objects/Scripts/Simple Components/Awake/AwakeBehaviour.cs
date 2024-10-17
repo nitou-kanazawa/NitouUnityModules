@@ -4,7 +4,7 @@ namespace nitou.LevelObjects.SimpleComponents {
 
     [DefaultExecutionOrder(GameConfigs.ExecutionOrder.FARST)]
     [DisallowMultipleComponent]
-    public abstract class AwakeBehaviour : MonoBehaviour {
+    internal abstract class AwakeBehaviour : MonoBehaviour {
 
         private void Awake() {
             OnAwake();
