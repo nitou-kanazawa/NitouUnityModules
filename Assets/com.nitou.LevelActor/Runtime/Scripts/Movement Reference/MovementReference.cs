@@ -3,16 +3,12 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 namespace nitou.LevelActors {
-       
+
     /// <summary>
     /// キャラクター移動方向の参照
     /// </summary>
     [System.Serializable]
-    public class MovementReference : MonoBehaviour {
-
-        //[DisplayAsString, HideLabel, ShowInInspector]
-        //[PropertySpace(1, 1), GUIColor("@Colors.Orange")]
-        //private readonly string message = "説明文";
+    public sealed class MovementReference : MonoBehaviour, IMovementInputModifier {
 
         [TitleGroup("Reference Mode")]
         [EnumToggleButtons, HideLabel]
@@ -44,12 +40,6 @@ namespace nitou.LevelActors {
             set => _externalReference = value;
         }
 
-
-        /// <summary>
-        /// 基準座標系（カメラ等）に変換された入力ベクトル.
-        /// </summary>
-        public Vector3 InputMovementReference { get; private set; }
-
         /// <summary>
         /// 基準座標系の正面ベクトル.
         /// </summary>
@@ -60,10 +50,18 @@ namespace nitou.LevelActors {
         /// </summary>
         public Vector3 MovementReferenceRight { get; private set; }
 
+        /// <summary>
+        /// 基準座標系（カメラ等）に変換された入力ベクトル.
+        /// </summary>
+        public Vector3 ModifieredInputVector { get; private set; }
+
 
         /// ----------------------------------------------------------------------------
         // Public Method 
 
+        /// <summary>
+        /// 参照モードを設定する
+        /// </summary>
         public void SetMode(MovementReferenceMode mode) {
             _mode = mode;
 
@@ -71,11 +69,10 @@ namespace nitou.LevelActors {
             UpdateMovementReferenceData();
         }
 
-
         /// <summary>
         /// 入力値の更新
         /// </summary>
-        public void UpdateData(Vector2 movementInput) {
+        public void UpdateInputData(Vector2 movementInput) {
             // 座標系の更新
             UpdateMovementReferenceData();
 
@@ -83,11 +80,14 @@ namespace nitou.LevelActors {
             Vector3 inputMovementReference =
                 (MovementReferenceRight * movementInput.x) +
                 (MovementReferenceForward * movementInput.y);
-            InputMovementReference = Vector3.ClampMagnitude(inputMovementReference, 1f);
+            ModifieredInputVector = Vector3.ClampMagnitude(inputMovementReference, 1f);
         }
 
+        /// <summary>
+        /// 入力値のリセット
+        /// </summary>
         public void ResetInputData() {
-            InputMovementReference = Vector3.zero;
+            ModifieredInputVector = Vector3.zero;
         }
 
 
@@ -117,9 +117,9 @@ namespace nitou.LevelActors {
                     if (ExternalReference != null) {
                         MovementReferenceForward = Vector3.Normalize(Vector3.ProjectOnPlane(ExternalReference.forward, transform.up));
                         MovementReferenceRight = Vector3.Normalize(Vector3.ProjectOnPlane(ExternalReference.right, transform.up));
-                    } else
-                        if (Application.isPlaying)
+                    } else if (Application.isPlaying) {
                         Debug_.LogWarning("the external reference is null! assign a Transform.");
+                    }
                     break;
             }
         }
@@ -145,7 +145,7 @@ namespace nitou.LevelActors {
             // Vectors
             Gizmos_.DrawRayArrow(pos, MovementReferenceForward * _radius, Colors.DeepSkyBlue);
             Gizmos_.DrawRayArrow(pos, MovementReferenceRight * _radius, Colors.Orangered);
-            Gizmos_.DrawRay(pos, InputMovementReference * _radius, Colors.WhiteSmoke);
+            Gizmos_.DrawRay(pos, ModifieredInputVector * _radius, Colors.WhiteSmoke);
         }
 #endif
 
