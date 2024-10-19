@@ -14,7 +14,6 @@ namespace nitou.HitSystem {
     /// </summary>
     public abstract class CollisionDetectorBase : ComponentBase {
 
-
         /// <summary>
         /// 実行タイミング
         /// </summary>
