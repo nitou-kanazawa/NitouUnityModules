@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UniRx;
+using UnityEngine;
 using Sirenix.OdinInspector;
 
 namespace nitou.Subsystem {
@@ -12,6 +11,7 @@ namespace nitou.Subsystem {
     /// （※OnTriggerExitは範囲内で非アクティブになったオブジェクトに対して呼ばれないため，その簡易対策）
     /// </summary>
     internal class SignalSender : MonoBehaviour{
+
         // イベント
         public event System.Action<GameObject> OnDisableEvent = delegate { };
         

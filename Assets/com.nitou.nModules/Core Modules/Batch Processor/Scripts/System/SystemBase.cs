@@ -57,7 +57,7 @@ namespace nitou.BachProcessor {
             // Unregister all components.
             var components = new List<TComponent>(Components);
             foreach (var component in components) {
-                SystemBase<TComponent, TSystem> .Unregister(component, Timing);
+                SystemBase<TComponent, TSystem>.Unregister(component, Timing);
             }
         }
 

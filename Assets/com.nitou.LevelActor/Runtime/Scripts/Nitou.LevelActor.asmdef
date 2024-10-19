@@ -3,7 +3,8 @@
     "rootNamespace": "nitou.LevelActors",
     "references": [
         "Nitou.Lib",
-        "Nitou.Modules"
+        "Nitou.Modules",
+        "UniRx"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

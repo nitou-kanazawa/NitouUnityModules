@@ -11,6 +11,9 @@ namespace nitou{
         /// </summary>
         TData Selected { get; }
 
+        /// <summary>
+        /// —LŒø‚©‚Ç‚¤‚©
+        /// </summary>
         bool IsValid { get; }
 
         /// <summary>
