@@ -1,11 +1,11 @@
 {
-    "name": "Nitou.Modules.Editor",
-    "rootNamespace": "nitou.EditorScripts",
+    "name": "nitou.Timeline.Editor",
+    "rootNamespace": "nitou.Timeline.Editor",
     "references": [
-        "Nitou.Lib",
-        "Nitou.Lib.Editor",
-        "Nitou.Modules",
-        "UniRx"
+        "GUID:f06555f75b070af458a003d92f9efb00",
+        "GUID:02f771204943f4a40949438e873e3eff",
+        "GUID:892dc5f160ce4444aa91de92e66b0758",
+        "GUID:2476b089dbd71864999b6fb874b913e0"
     ],
     "includePlatforms": [
         "Editor"

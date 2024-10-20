@@ -1,0 +1,6 @@
+﻿Annotation
+{
+    width:18px;
+    height:18px;
+    background-image: resource("Assets/_Nitou/_Module/Pilot module/Timeline Module/Editor/Marker/Stylesheets/pencil.png");
+}

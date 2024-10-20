@@ -1,7 +1,6 @@
 using System.Linq;
 using UniRx;
 using UnityEngine;
-using nitou.BachProcessor;
 using Sirenix.OdinInspector;
 
 namespace nitou.Detecor {
