@@ -13,35 +13,7 @@ namespace nitou.Detecor {
     /// 交差検出用コンポーネントの基底クラス．
     /// 具体的な検出処理は派生クラス側に定義する．
     /// </summary>
-    public abstract class CollisionDetectorBase : ComponentBase {
-
-        /// <summary>
-        /// 実行タイミング
-        /// </summary>
-        [DisableInPlayMode]
-        [EnumToggleButtons, HideLabel]
-        [SerializeField, Indent] protected UpdateTiming Timing = UpdateTiming.Update;
-
-        [Title("Hit Settings")]
-
-        // コライダー保有オブジェクトの判定
-        [DisableInPlayMode]
-        [SerializeField, Indent] protected CachingTarget _cacheTargetType = CachingTarget.Collider;
-
-        // 対象レイヤー
-        [DisableInPlayMode]
-        [SerializeField, Indent] protected LayerMask _hitLayer;
-
-        // タグ判定を有無
-        [DisableInPlayMode]
-        [SerializeField, Indent] protected bool _useHitTag = false;
-
-        // 対象タグ
-        [ShowIf("@_useHitTag")]
-        [DisableInPlayMode]
-        [SerializeField, Indent] protected string[] _hitTagArray;
-
-        // --- 
+    public abstract class CollisionHitDetector : DetectorBase {
 
         /// <summary>
         /// 衝突コライダーのリスト.
@@ -101,12 +73,7 @@ namespace nitou.Detecor {
 
 
         /// ----------------------------------------------------------------------------
-        // MonoBehaviour Method
-
-        protected virtual void Reset() {
-            // 既定値は"Default"レイヤー
-            _hitLayer = LayerMaskUtil.OnlyDefault();
-        }
+        // LifeCycle Events
 
         protected virtual void OnDestroy() {
             _onHitObjectsSubject.OnCompleted();

@@ -11,8 +11,8 @@ namespace nitou.Detecor {
     /// </summary>
     public partial class SearchRange : DetectorBase {
 
-        // 半径
-        [SerializeField] private float _radius = 2f;
+        [Title("Area Shape")]
+        [SerializeField, Indent] private float _radius = 2f;
 
         // 内部処理用
         private readonly ReactiveCollection<GameObject> _hitObjects = new();
@@ -33,22 +33,14 @@ namespace nitou.Detecor {
         /// ----------------------------------------------------------------------------
         // LifeCycle Events
 
-        private void Awake() {
-            _transform = transform;
-
-            // test
-            HitObjects.ObserveCountChanged()
-                .Subscribe(_ => Debug_.ListLog(HitObjects.ToList(), Colors.Red));
-        }
-
         private void OnEnable() {
             SearchRangeSystem.Register(this, Timing);
-            InitializeBufferOfCollidedCollision();      // キャッシュのクリア
+            InitializeBufferOfCollidedCollision();      
         }
 
         private void OnDisable() {
             SearchRangeSystem.Unregister(this, Timing);
-            InitializeBufferOfCollidedCollision();      // キャッシュのクリア
+            InitializeBufferOfCollidedCollision();      
         }
 
         private void OnDestroy() {
@@ -71,7 +63,6 @@ namespace nitou.Detecor {
 
             // 同期させる
             _hitObjects.SynchronizeWith(hitObjectsInThisFram);
-
         }
 
 
@@ -88,29 +79,17 @@ namespace nitou.Detecor {
 
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
+        /// <summary>
+        /// 非選択時のギズモ表示
+        /// </summary>
         private void OnDrawGizmos() {
 
             var position = transform.position;
+            var color = Count > 0 ? Colors.GreenYellow : Colors.White;
 
             // Range
-            var color = Count > 0 ? Colors.Green : Colors.GreenYellow;
-            Gizmos_.DrawWireSphere(position, _radius, color);
-
-            //{
-            //    var sceneViewCamera = Camera.current;
-            //    if (sceneViewCamera != null) {
-            //        // シーンビューカメラの回転を取得
-            //        Quaternion cameraRotation = sceneViewCamera.transform.rotation;
-
-            //        // カメラ方向に円を回転
-            //        Gizmos.matrix = Matrix4x4.TRS(position, cameraRotation, Vector3.one);
-            //        Gizmos_.DrawWireCircle(transform.position, _radius, Colors.Red);
-
-            //        // 行列をリセット
-            //        Gizmos.matrix = Matrix4x4.identity;
-            //    }
-            //}
-
+            var offset = (0.1f * _radius);
+            Gizmos_.DrawWireCylinder(position, _radius, offset * 2f, color);
 
             if (_hitObjects.IsNullOrEmpty()) return;
 
@@ -119,6 +98,16 @@ namespace nitou.Detecor {
                 Gizmos_.DrawSphere(obj.transform.position, 0.1f, Colors.Gray);
             }
 
+        }
+
+        /// <summary>
+        /// 選択時のギズモ表示
+        /// </summary>
+        private void OnDrawGizmosSelected() {
+            var position = transform.position;
+            var color = Count > 0 ? Colors.GreenYellow : Colors.White;
+
+            Gizmos_.DrawSphere(position, _radius, color.WithAlpha(0.2f));
         }
 #endif
     }

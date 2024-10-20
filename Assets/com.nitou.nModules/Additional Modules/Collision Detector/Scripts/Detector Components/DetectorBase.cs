@@ -36,15 +36,12 @@ namespace nitou.Detecor{
         [SerializeField, Indent] protected string[] _hitTagArray;
 
 
-
-
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
         protected virtual void Reset() {
             // Šù’èƒŒƒCƒ„[‚Í"Default"
             _hitLayer = LayerMaskUtil.OnlyDefault();
         }
-
 #endif
     }
 }

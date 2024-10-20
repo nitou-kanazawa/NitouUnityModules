@@ -1,7 +1,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace nitou.HitSystem {
+namespace nitou.Detecor {
 
     /// <summary>
     /// 干渉検出のタイミングと範囲に関するデータ

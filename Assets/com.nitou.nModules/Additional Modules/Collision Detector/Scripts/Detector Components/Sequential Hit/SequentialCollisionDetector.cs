@@ -1,44 +1,27 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
-using nitou.BachProcessor;
 
-namespace nitou.Detecor {
+namespace nitou.Detecor{
 
-    public partial class TestSensor : CollisionHitDetector {
-
-        // 1度に検出できるコリジョンの最大数.
-        private const int CAPACITY = 30;
-
-        [MinValue(0.1f)]
-        [SerializeField] float _radius = 1f;
-
-        // 内部処理用
-        Transform _transform;
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed partial class SequentialCollisionDetector : CollisionHitDetector{
 
 
         /// ----------------------------------------------------------------------------
         // LifeCycle Events
 
-        private void Awake() {
-            _transform = transform;
-        }
-
         private void OnEnable() {
-            TestSensorSystem.Register(this, Timing);
-            InitializeBufferOfCollidedCollision();      // キャッシュのクリア
+            SequentialCollisionDetectorSystem.Register(this, Timing);
+            InitializeBufferOfCollidedCollision();      
         }
 
         private void OnDisable() {
-            TestSensorSystem.Unregister(this, Timing);
+            SequentialCollisionDetectorSystem.Unregister(this, Timing);
         }
 
-
-
-        /// ----------------------------------------------------------------------------
-        // Private Methods
-
-        /// <summary>
-        /// Initialize data at the start of processing.
+        // <summary>
+        /// 各フレームでの検出開始時の初期化処理
         /// </summary>
         private void PrepareFrame() {
             _hitCollidersInThisFrame.Clear();
@@ -51,7 +34,7 @@ namespace nitou.Detecor {
         private void OnUpdate(in Collider[] hitColliders) {
 
             // Perform collision detection.
-            var count = Physics.OverlapSphereNonAlloc(_transform.position, _radius, hitColliders, _hitLayer, QueryTriggerInteraction.Ignore);
+            var count = Physics.OverlapSphereNonAlloc(transform.position, 0.1f, hitColliders, _hitLayer, QueryTriggerInteraction.Ignore);
 
             // Register objects that are not in contact from the list obtained with OverlapSphereNonAlloc(...).
             for (var hitIndex = 0; hitIndex < count; hitIndex++) {
@@ -65,32 +48,16 @@ namespace nitou.Detecor {
                     continue;
 
                 // Register the collider.
-                Debug.Log("Add");
                 _hitColliders.Add(hit);
                 _hitObjects.Add(hitObject);
                 _hitCollidersInThisFrame.Add(hit);
                 _hitObjectsInThisFrame.Add(hitObject);
             }
 
-
         }
-
 
         /// ----------------------------------------------------------------------------
-#if UNITY_EDITOR
-        private void OnDrawGizmos() {
+        // Private Method
 
-            //Gizmos.color = Color.red;
-            //Gizmos.DrawWireSphere(Collider.transform.position, Collider.radius);
-
-            Gizmos_.DrawWireSphere(transform.position, _radius, Colors.GreenYellow);
-
-            if (_hitColliders == null) return;
-            foreach(var obj in _hitObjects) {
-                Gizmos_.DrawSphere(obj.transform.position, 0.1f, Colors.Green.WithAlpha(0.5f));
-            }
-
-        }
-#endif
     }
 }
