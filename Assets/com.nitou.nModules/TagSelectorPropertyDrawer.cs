@@ -4,8 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 namespace nitou.LevelActors.Attributes {
-    //Original by DYLAN ENGELMAN http://jupiterlighthousestudio.com/custom-inspectors-unity/
-    //Altered by Brecht Lecluyse https://www.brechtos.com
+
+    // Original by DYLAN ENGELMAN http://jupiterlighthousestudio.com/custom-inspectors-unity/
+    // Altered by Brecht Lecluyse https://www.brechtos.com
 
     [CustomPropertyDrawer(typeof(TagSelectorAttribute))]
     public class TagSelectorPropertyDrawer : PropertyDrawer {
