@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+// [éQçl]
+//  Using tags as a dropdown property in UnityÅfs inspector using PropertyDrawers https://www.brechtos.com/tagselectorattribute/
+
 namespace nitou.LevelActors.Attributes {
 
     // Original by DYLAN ENGELMAN http://jupiterlighthousestudio.com/custom-inspectors-unity/
