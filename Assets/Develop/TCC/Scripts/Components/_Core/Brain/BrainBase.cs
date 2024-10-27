@@ -4,10 +4,15 @@ using nitou.BachProcessor;
 namespace nitou.LevelActors.Core {
     using nitou.LevelActors.Interfaces.Components;
     using nitou.LevelActors.Interfaces.Core;
+    using nitou.LevelActors.Shared;
 
+    /// <summary>
+    /// アクターの移動処理を統括するBrain基底クラス．
+    /// </summary>
     public abstract class BrainBase : MonoBehaviour,
         IWarp, IBrain,
-        IEarlyUpdateComponent, ITransform {
+        ITransform,
+        IEarlyUpdateComponent {
 
         // Manager
         private readonly MoveManager _moveManager = new();
@@ -237,7 +242,7 @@ namespace nitou.LevelActors.Core {
 
 
         /// ----------------------------------------------------------------------------
-        // 
+        // Abstract Method
 
         /// <summary>
         /// Apply final position
@@ -286,6 +291,6 @@ namespace nitou.LevelActors.Core {
 
 
 
-   
+
     }
 }

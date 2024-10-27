@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace nitou.LevelActors.Interfaces.Components {
     using nitou.LevelActors.Interfaces.Core;
-    using nitou.LevelActors.Core;
 
     /// <summary>
     /// Interface for accessing the behavior results of the Brain
@@ -60,19 +59,5 @@ namespace nitou.LevelActors.Interfaces.Components {
         /// Difference between the character's orientation in the current frame and the previous frame
         /// </summary>
         float DeltaTurnAngle { get; }
-    }
-
-
-    /// <summary>
-    /// Callback called when CharacterSettings values change.
-    /// Mainly used for changing CharacterController or Collider sizes.
-    /// </summary>
-    public interface ICharacterSettingUpdateReceiver {
-
-        /// <summary>
-        /// CharacterSettings values have changed
-        /// </summary>
-        /// <param name="settings">Changed CharacterSettings</param>
-        void OnUpdateSettings(ActorSettings settings);
     }
 }

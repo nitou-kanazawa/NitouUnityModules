@@ -1,5 +1,5 @@
 
-namespace nitou.LevelActors{
+namespace nitou.LevelActors.Shared{
 
     public static class Order {
         public const int GameObjectPool = -1000;

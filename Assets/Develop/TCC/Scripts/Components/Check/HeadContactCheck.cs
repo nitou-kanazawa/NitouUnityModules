@@ -9,6 +9,7 @@ namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
     using nitou.LevelActors.Interfaces.Utils;
+    using nitou.LevelActors.Shared;
 
     /// <summary>
     ///     This is a component that performs upward object detection.
@@ -16,17 +17,12 @@ namespace nitou.LevelActors.Check {
     ///     It also considers slightly ambiguous detection, not just complete contact with other objects, and calls UnityEvents
     ///     upon collision.
     /// </summary>
-    [RequireComponent(typeof(ActorSettings))]
     [DisallowMultipleComponent]
+    [AddComponentMenu(MenuList.MenuCheck + nameof(HeadContactCheck))]
     public class HeadContactCheck : MonoBehaviour,
         IOverheadDetection,
         IEarlyUpdateComponent,
         IComponentCondition {
-
-        /// <summary>
-        ///     Number of detectable colliders.
-        /// </summary>
-        private const int MaxContactSize = 5;
 
         private static readonly RaycastHit[] Result = new RaycastHit[MaxContactSize];
 
@@ -66,9 +62,25 @@ namespace nitou.LevelActors.Check {
         /// </summary>
         [SerializeField] private UnityEvent _onChangeInRange;
 
-        private ActorSettings _settings;
-
+        // references
+        private ActorSettings _actorSettings;
         private ITransform _transform;
+
+        // 定数
+
+        /// <summary>
+        ///     Number of detectable colliders.
+        /// </summary>
+        private const int MaxContactSize = 5;
+
+
+        /// ----------------------------------------------------------------------------
+        // Property
+
+        /// <summary>
+        /// 処理オーダー．
+        /// </summary>
+        int IEarlyUpdateComponent.Order => Order.Check;
 
         /// <summary>
         ///     Returns true if the head is in contact with other objects during this frame.
@@ -83,7 +95,7 @@ namespace nitou.LevelActors.Check {
         /// <summary>
         ///     Height to the head.
         /// </summary>
-        private float Height => _settings.Height + _headPositionOffset;
+        private float Height => _actorSettings.Height + _headPositionOffset;
 
         /// <summary>
         ///     Returns true if the head is in contact with other objects.
@@ -109,30 +121,28 @@ namespace nitou.LevelActors.Check {
         public GameObject ContactedObject { get; private set; }
 
 
-        int IEarlyUpdateComponent.Order => Order.Check;
-
-
         /// ----------------------------------------------------------------------------
-        // MonoBehaviour Method
+        // Lifecycle Events
 
         private void Awake() {
             GatherComponents();
         }
 
         private void OnDrawGizmosSelected() {
-            if (_settings == null)
-                TryGetComponent(out _settings);
+            if (_actorSettings == null) {
+                GatherComponents();
+            }
 
             // If a collider is considered in contact, set the base color to red.
             if (IsHeadContact)
                 Gizmos.color = Color.red;
 
             var position = transform.position;
-            var headPosition = position + new Vector3(0, Height - _settings.Radius, 0);
+            var headPosition = position + new Vector3(0, Height - _actorSettings.Radius, 0);
 
             if (Application.isPlaying) {
                 // Represent the position where collision is detected based on DistanceFromRootPosition.
-                var offset = _settings.Radius;
+                var offset = _actorSettings.Radius;
                 var contactPosition = position + new Vector3(0, DistanceFromRootPosition - offset, 0);
                 DrawHitRangeGizmos(headPosition, contactPosition);
 
@@ -148,10 +158,10 @@ namespace nitou.LevelActors.Check {
 
             // Represent capsule-shaped Gizmos.
             void DrawHitRangeGizmos(in Vector3 startPosition, in Vector3 endPosition) {
-                var leftOffset = new Vector3(_settings.Radius, 0, 0);
-                var rightOffset = new Vector3(-_settings.Radius, 0, 0);
-                var forwardOffset = new Vector3(0, 0, _settings.Radius);
-                var backOffset = new Vector3(0, 0, -_settings.Radius);
+                var leftOffset = new Vector3(_actorSettings.Radius, 0, 0);
+                var rightOffset = new Vector3(-_actorSettings.Radius, 0, 0);
+                var forwardOffset = new Vector3(0, 0, _actorSettings.Radius);
+                var backOffset = new Vector3(0, 0, -_actorSettings.Radius);
 
                 // Represent vertical lines before and after the capsule.
                 Gizmos.DrawLine(startPosition + leftOffset, endPosition + leftOffset);
@@ -160,17 +170,15 @@ namespace nitou.LevelActors.Check {
                 Gizmos.DrawLine(startPosition + backOffset, endPosition + backOffset);
 
                 // Represent circular shapes above and below the capsule.
-                Gizmos.DrawWireSphere(startPosition, _settings.Radius);
-                Gizmos.DrawWireSphere(endPosition, _settings.Radius);
+                Gizmos.DrawWireSphere(startPosition, _actorSettings.Radius);
+                Gizmos.DrawWireSphere(endPosition, _actorSettings.Radius);
 
                 // Fill the color of the circular shapes above and below the capsule.
-                Gizmos.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 0.4f);
-                Gizmos.DrawSphere(startPosition, _settings.Radius);
-                Gizmos.DrawSphere(endPosition, _settings.Radius);
+                var color = Colors.Yellow.WithAlpha(.4f);
+                Gizmos_.DrawSphere(startPosition, _actorSettings.Radius, color);
+                Gizmos_.DrawSphere(endPosition, _actorSettings.Radius, color);
             }
         }
-
-
 
         void IEarlyUpdateComponent.OnUpdate(float deltaTime) {
             using var profile = new ProfilerScope(nameof(HeadContactCheck));
@@ -180,7 +188,7 @@ namespace nitou.LevelActors.Check {
 
             // Prepare parameters needed for Raycast.
             // Cast the ray from the center of the body to avoid contact with the ground.
-            var offset = _settings.Height * 0.5f;
+            var offset = _actorSettings.Height * 0.5f;
             IsObjectOverhead = DetectCollidersAboveHead(offset, out var closestHit);
 
             if (IsObjectOverhead) {
@@ -203,16 +211,23 @@ namespace nitou.LevelActors.Check {
         }
 
         void IComponentCondition.OnConditionCheck(List<string> messageList) {
-            if (_settings == null)
-                TryGetComponent(out _settings);
+            if (_actorSettings == null)
+                TryGetComponent(out _actorSettings);
 
-            if (_settings.Height > MaxHeight)
+            if (_actorSettings.Height > MaxHeight)
                 messageList.Add("Max Range should be set to a value greater than or equal to _settings.Height.");
         }
 
 
         /// ----------------------------------------------------------------------------
         // Private Method
+
+        private void GatherComponents() {
+            _actorSettings = GetComponentInParent<ActorSettings>() ?? throw new System.NullReferenceException(nameof(_actorSettings));
+
+            // Components
+            _actorSettings.TryGetComponent( out _transform);
+        }
 
         /// <summary>
         ///     Sets properties when out of range.
@@ -242,13 +257,13 @@ namespace nitou.LevelActors.Check {
             var preContactHead = IsHeadContact;
 
             // Distance is the sum of RaycastHit's distance, the offset at the start of the Cast, and the SphereCast's offset.
-            DistanceFromRootPosition = closestHit.distance + offset + _settings.Radius + _headPositionOffset;
+            DistanceFromRootPosition = closestHit.distance + offset + _actorSettings.Radius + _headPositionOffset;
             ContactPoint = closestHit.point;
             ContactedObject = closestHit.collider.gameObject;
 
             // If the distance from the ground is lower than the height setting, consider it a collision.
             // Also, if the collision detection is different from the previous frame, consider it a hit in the current frame.
-            IsHeadContact = DistanceFromRootPosition < _settings.Height + _headPositionOffset;
+            IsHeadContact = DistanceFromRootPosition < _actorSettings.Height + _headPositionOffset;
             IsHitCollisionInThisFrame = !preContactHead && IsHeadContact;
         }
 
@@ -261,21 +276,17 @@ namespace nitou.LevelActors.Check {
         /// <returns>True if a detectable Collider is within range</returns>
         private bool DetectCollidersAboveHead(float offset, out RaycastHit closestHit) {
             var ray = new Ray(_transform.Position + new Vector3(0, offset + _headPositionOffset, 0), Vector3.up);
-            var rayDistance = MaxHeight + _headPositionOffset - offset - _settings.Radius;
+            var rayDistance = MaxHeight + _headPositionOffset - offset - _actorSettings.Radius;
 
             // Perform a SphereCast upward to check for the presence of colliders above the head.
-            var count = Physics.SphereCastNonAlloc(ray, _settings.Radius, Result,
-                rayDistance, _settings.EnvironmentLayer,
+            var count = Physics.SphereCastNonAlloc(ray, _actorSettings.Radius, Result,
+                rayDistance, _actorSettings.EnvironmentLayer,
                 QueryTriggerInteraction.Ignore);
 
             // Get the closest Raycast excluding the Collider owned by itself.
-            var isHit = _settings.ClosestHit(Result, count, rayDistance, out closestHit);
+            var isHit = _actorSettings.ClosestHit(Result, count, rayDistance, out closestHit);
             return isHit;
         }
 
-        private void GatherComponents() {
-            TryGetComponent(out _transform);
-            TryGetComponent(out _settings);
-        }
     }
 }

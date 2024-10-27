@@ -7,9 +7,10 @@ namespace nitou.LevelActors.Effect {
     using nitou.LevelActors.Core;
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
+    using nitou.LevelActors.Shared;
 
     /// <summary>
-    /// 重力を適用するコンポーネント．
+    /// アクターに重力を適用するコンポーネント．
     /// 
     /// It adds downward acceleration at the speed set in Gravity.
     /// The acceleration multiplier can be multiplied for each character.
@@ -17,8 +18,9 @@ namespace nitou.LevelActors.Effect {
     /// Events are executed at the timing of landing and takeoff.
     /// Components that move up and down, such as jumping, may manipulate this value.
     /// </summary>
+    [AddComponentMenu(MenuList.MenuEffect + nameof(Gravity))]
     [DisallowMultipleComponent]
-    public class Gravity : MonoBehaviour,
+    public sealed class Gravity : MonoBehaviour,
         IGravity, IGravityEvent,
         IEffect,
         IEarlyUpdateComponent {
@@ -84,7 +86,14 @@ namespace nitou.LevelActors.Effect {
         /// </summary>
         public bool IsLanded { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private bool IsGrounded => _groundCheck.IsOnGround && FallSpeed <= 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private bool IsGroundedStrictly => _groundCheck.IsFirmlyOnGround && FallSpeed < 0;
 
         /// <summary>
@@ -117,7 +126,7 @@ namespace nitou.LevelActors.Effect {
 
         private void Awake() {
             _settings = GetComponentInParent<ActorSettings>();
-            _groundCheck = _settings.GetComponentInChildren<IGroundContact>();
+            _settings.TryGetActorComponent(ActorComponent.Check, out _groundCheck);
         }
 
         private void Start() {

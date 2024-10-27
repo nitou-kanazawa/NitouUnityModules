@@ -9,13 +9,15 @@ namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Core;
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
+    using nitou.LevelActors.Shared;
 
     /// <summary>
     /// 地面との衝突検出コンポーネント.地面が存在するかどうかや接触している面の向きなど,
     /// 接触しているオブジェクトに関する情報を判断し、地面オブジェクトの変化を通知する.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GroundCheck : MonoBehaviour, 
+    [AddComponentMenu(MenuList.MenuCheck + nameof(GroundCheck))]
+    public sealed class GroundCheck : MonoBehaviour,
         IGroundContact,
         IGroundObject,
         IEarlyUpdateComponent {
@@ -41,13 +43,8 @@ namespace nitou.LevelActors.Check {
         [PropertyRange(0, 90)]
         [SerializeField, Indent] int _maxSlope = 60;
 
-        /// <summary>
-        /// 地面オブジェクトが変化したときのイベント通知
-        /// </summary>
-        public IObservable<GameObject> OnGrounObjectChanged => _onGroundObjectChandedSubject;
-
         // references
-        private ActorSettings _actorBody;
+        private ActorSettings _actorSettings;
         private ITransform _transform;
 
         // 内部処理用
@@ -62,6 +59,9 @@ namespace nitou.LevelActors.Check {
         /// ----------------------------------------------------------------------------
         // Property
 
+        /// <summary>
+        /// 処理オーダー．
+        /// </summary>
         int IEarlyUpdateComponent.Order => Order.Check;
 
         /// <summary>
@@ -114,6 +114,12 @@ namespace nitou.LevelActors.Check {
         public bool IsChangeGroundObject { get; private set; } = false;
 
 
+        /// <summary>
+        /// 地面オブジェクトが変化したときのイベント通知
+        /// </summary>
+        public IObservable<GameObject> OnGrounObjectChanged => _onGroundObjectChandedSubject;
+
+
         /// ----------------------------------------------------------------------------
         // Lifecycle Events
 
@@ -126,18 +132,18 @@ namespace nitou.LevelActors.Check {
         }
 
         void IEarlyUpdateComponent.OnUpdate(float deltaTime) {
+            using var _ = new ProfilerScope(nameof(GroundCheck));
 
-            using var _ = new ProfilerScope("Ground Check");
             var preGroundObject = GroundObject;
-            var offset = _actorBody.Radius * 2;
+            var offset = _actorSettings.Radius * 2;
             var origin = new Vector3(0, offset, 0) + (_transform?.Position ?? transform.position);
             var groundCheckDistance = _ambiguousDistance + offset;
 
             // Perform ground detection while ignoring the character's own collider.
             var groundCheckCount = Physics.SphereCastNonAlloc(
-                origin, _actorBody.Radius, Vector3.down, _hits,
+                origin, _actorSettings.Radius, Vector3.down, _hits,
                 groundCheckDistance,
-                _actorBody.EnvironmentLayer, QueryTriggerInteraction.Ignore);
+                _actorSettings.EnvironmentLayer, QueryTriggerInteraction.Ignore);
 
             var isHit = ClosestHit(_hits, groundCheckCount, groundCheckDistance, out _groundCheckHit);
 
@@ -145,13 +151,14 @@ namespace nitou.LevelActors.Check {
             if (isHit) {
                 var inLimitAngle = Vector3.Angle(Vector3.up, _groundCheckHit.normal) < _maxSlope;
 
-                DistanceFromGround = _groundCheckHit.distance - (offset - _actorBody.Radius);
+                DistanceFromGround = _groundCheckHit.distance - (offset - _actorSettings.Radius);
                 IsOnGround = DistanceFromGround < _ambiguousDistance;
                 IsFirmlyOnGround = DistanceFromGround <= _preciseDistance && inLimitAngle;
                 GroundContactPoint = _groundCheckHit.point;
                 GroundSurfaceNormal = _groundCheckHit.normal;
                 GroundCollider = _groundCheckHit.collider;
                 GroundObject = IsOnGround ? _groundCheckHit.collider.gameObject : null;
+
             } else {
                 DistanceFromGround = _ambiguousDistance;
                 IsOnGround = false;
@@ -165,7 +172,7 @@ namespace nitou.LevelActors.Check {
             // If the object has changed, invoke _onChangeGroundObject.
             IsChangeGroundObject = preGroundObject != GroundObject;
             if (IsChangeGroundObject) {
-                using var invokeProfile = new ProfilerScope("Ground Check.Invoke");
+                using var invokeProfile = new ProfilerScope($"{nameof(GroundCheck)}.Invoke");
                 _onGroundObjectChandedSubject.OnNext(GroundObject);
             }
 
@@ -185,10 +192,10 @@ namespace nitou.LevelActors.Check {
         /// <returns>コライダーにヒットした場合はtrueを返します。</returns>
         public bool Raycast(Vector3 position, float distance, out RaycastHit hit) {
             var groundCheckCount = Physics.RaycastNonAlloc(position, Vector3.down, _hits, distance,
-                _actorBody.EnvironmentLayer, QueryTriggerInteraction.Ignore);
+                _actorSettings.EnvironmentLayer, QueryTriggerInteraction.Ignore);
 
             // 最も近いオブジェクト
-            return _actorBody.ClosestHit(_hits, groundCheckCount, distance, out hit);
+            return _actorSettings.ClosestHit(_hits, groundCheckCount, distance, out hit);
         }
 
 
@@ -196,13 +203,10 @@ namespace nitou.LevelActors.Check {
         // Private Method
 
         private void GatherComponents() {
-            if(_transform == null) {
-                _transform = this.GetComponentInParent<ITransform>();
-            }
+            _actorSettings = GetComponentInParent<ActorSettings>() ?? throw new System.NullReferenceException(nameof(_actorSettings));
 
-            if(_actorBody == null) {
-                _actorBody = this.GetComponentInParent<ActorSettings>();
-            }
+            // Components
+            _actorSettings.TryGetComponent(out _transform);
         }
 
         private bool ClosestHit(IReadOnlyList<RaycastHit> hits, int count, float maxDistance, out RaycastHit closestHit) {
@@ -213,7 +217,7 @@ namespace nitou.LevelActors.Check {
 
             foreach (var hit in hits.Take(count)) {
                 var isOverOriginHeight = (hit.distance == 0);
-                if (isOverOriginHeight || hit.distance > min || _actorBody.IsOwnCollider(hit.collider) || hit.collider == null)
+                if (isOverOriginHeight || hit.distance > min || _actorSettings.IsOwnCollider(hit.collider) || hit.collider == null)
                     continue;
 
                 min = hit.distance;
@@ -234,35 +238,35 @@ namespace nitou.LevelActors.Check {
         private void OnDrawGizmosSelected() {
 
             void DrawHitRangeGizmos(Vector3 startPosition, Vector3 endPosition) {
-                var leftOffset = new Vector3(_actorBody.Radius, 0, 0);
-                var rightOffset = new Vector3(-_actorBody.Radius, 0, 0);
-                var forwardOffset = new Vector3(0, 0, _actorBody.Radius);
-                var backOffset = new Vector3(0, 0, -_actorBody.Radius);
+                var leftOffset = new Vector3(_actorSettings.Radius, 0, 0);
+                var rightOffset = new Vector3(-_actorSettings.Radius, 0, 0);
+                var forwardOffset = new Vector3(0, 0, _actorSettings.Radius);
+                var backOffset = new Vector3(0, 0, -_actorSettings.Radius);
 
                 Gizmos.DrawLine(startPosition + leftOffset, endPosition + leftOffset);
                 Gizmos.DrawLine(startPosition + rightOffset, endPosition + rightOffset);
                 Gizmos.DrawLine(startPosition + forwardOffset, endPosition + forwardOffset);
                 Gizmos.DrawLine(startPosition + backOffset, endPosition + backOffset);
-                Gizmos_.DrawSphere(startPosition, _actorBody.Radius, Color.yellow);
-                Gizmos_.DrawSphere(endPosition, _actorBody.Radius, Color.yellow);
+                Gizmos_.DrawSphere(startPosition, _actorSettings.Radius, Color.yellow);
+                Gizmos_.DrawSphere(endPosition, _actorSettings.Radius, Color.yellow);
             }
 
-            if (_actorBody == null) {
-                _actorBody = gameObject.GetComponentInParent<ActorSettings>();
+            if (_actorSettings == null) {
+                _actorSettings = gameObject.GetComponentInParent<ActorSettings>();
             }
 
             var position = transform.position;
-            var offset = _actorBody.Height.Half();
+            var offset = _actorSettings.Height.Half();
 
 
             if (Application.isPlaying) {
                 Gizmos.color = IsOnGround ? Color.red : Gizmos.color;
                 Gizmos.color = IsFirmlyOnGround ? Color.blue : Gizmos.color;
 
-                var topPosition = new Vector3 { y = _actorBody.Radius - _preciseDistance };
+                var topPosition = new Vector3 { y = _actorSettings.Radius - _preciseDistance };
                 var bottomPosition = IsOnGround
-                    ? new Vector3 { y = _actorBody.Radius - DistanceFromGround }
-                    : new Vector3 { y = _actorBody.Radius - _ambiguousDistance };
+                    ? new Vector3 { y = _actorSettings.Radius - DistanceFromGround }
+                    : new Vector3 { y = _actorSettings.Radius - _ambiguousDistance };
 
                 DrawHitRangeGizmos(position + topPosition, position + bottomPosition);
 
@@ -273,8 +277,8 @@ namespace nitou.LevelActors.Check {
                     Gizmos.DrawRay(_groundCheckHit.point, GroundSurfaceNormal * offset);
                 }
             } else {
-                var topPosition = new Vector3 { y = _actorBody.Radius - _preciseDistance };
-                var bottomPosition = new Vector3 { y = _actorBody.Radius - _ambiguousDistance };
+                var topPosition = new Vector3 { y = _actorSettings.Radius - _preciseDistance };
+                var bottomPosition = new Vector3 { y = _actorSettings.Radius - _ambiguousDistance };
                 DrawHitRangeGizmos(position + topPosition, position + bottomPosition);
             }
         }

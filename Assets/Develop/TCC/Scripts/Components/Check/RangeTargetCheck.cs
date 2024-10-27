@@ -9,6 +9,8 @@ namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
     using nitou.LevelActors.Attributes;
+    using nitou.LevelActors.Shared;
+
 
     /// <summary>
     /// This component considers line of sight and obstacles to retrieve objects with specific tags within its range.

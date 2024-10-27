@@ -2,58 +2,72 @@ using UnityEngine;
 using UnityEngine.Events;
 using nitou.BachProcessor;
 using nitou.DesignPattern.Pooling;
+using Sirenix.OdinInspector;
 
 namespace nitou.LevelActors.Effect {
     using nitou.LevelActors.Core;
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
-    
+    using nitou.LevelActors.Shared;
+
     /// <summary>
-    ///     A component that applies an impact to the character from outside.
-    ///     It decelerates due to air resistance and friction with the ground.
+    /// アクターに外部からの衝撃を適用するコンポーネント．
+    /// 空気抵抗や地面との摩擦により減速する．
     /// </summary>
+    [AddComponentMenu(MenuList.MenuEffect + nameof(ExtraForce))]
     [DisallowMultipleComponent]
     public class ExtraForce : ComponentBase,
         IEffect,
         IEarlyUpdateComponent {
 
         /// <summary>
-        ///     Friction
+        /// 摩擦．
         /// </summary>
-        [SerializeField] float _friction = 1;
+        [SerializeField, Indent] float _friction = 1;
 
         /// <summary>
-        ///     air resistance
+        /// 空気抵抗．
         /// </summary>
-        [SerializeField] float _drag = 0.1f;
+        [SerializeField, Indent] float _drag = 0.1f;
 
         /// <summary>
-        ///     Threshold to stop acceleration.
+        /// 加速度を停止するための閾値．
         /// </summary>
-        [SerializeField] float _threshold = 0.5f;
+        [SerializeField, Indent] float _threshold = 0.5f;
 
         /// <summary>
-        ///     Reflectance strength of the character. 1 for full reflection, 0 to stop upon collision.
+        /// 反発係数．1で完全反射、0で衝突時に停止．
         /// </summary>
-        [Range(0, 1)] 
-        [SerializeField] float _bounce = 0f;
+        [PropertyRange(0, 1)] 
+        [SerializeField, Indent] float _bounce = 0f;
 
         /// <summary>
         ///     Callbacks when hit other collider.
         /// </summary>
         public UnityEvent<Collider> OnHitOtherCollider;
 
-        private IGroundContact _groundCheck;
+        // References
         private ActorSettings _settings;
+        private IGroundContact _groundCheck;
         private ITransform _transform;
+        
+        // State
         private Vector3 _velocity;
 
         // 定数
         private const int HIT_CAPACITY = 15;
 
 
+        /// ----------------------------------------------------------------------------
+        // Properity
+
         /// <summary>
-        ///     Reflectance strength of the character. 1 for full reflection, 0 to stop upon collision.
+        /// 更新タイミング
+        /// </summary>
+        int IEarlyUpdateComponent.Order => Order.Effect;
+
+        /// <summary>
+        /// 反発係数．
         /// </summary>
         public float Bounce {
             get => _bounce;
@@ -61,18 +75,13 @@ namespace nitou.LevelActors.Effect {
         }
 
         /// <summary>
-        /// 現在の速度
+        /// 速度．
         /// </summary>
         public Vector3 Velocity => _velocity;
 
-        /// <summary>
-        /// 更新タイミング
-        /// </summary>
-        int IEarlyUpdateComponent.Order => Order.Effect;
-
 
         /// ----------------------------------------------------------------------------
-        // MonoBehviour Method
+        // Lifecycle Events
 
         private void Awake() {
             GatherComponents();
@@ -121,7 +130,6 @@ namespace nitou.LevelActors.Effect {
         }
 
 
-
         /// ----------------------------------------------------------------------------
         // Public Method
 
@@ -156,9 +164,10 @@ namespace nitou.LevelActors.Effect {
         ///     Gather all components attached own object.
         /// </summary>
         private void GatherComponents() {
-            _settings = gameObject.GetComponentInParent<ActorSettings>();
-            _transform = _settings.gameObject.GetComponent<ITransform>();
-            _groundCheck = _settings.gameObject.GetComponentInChildren<IGroundContact>();
+            _settings = GetComponentInParent<ActorSettings>();
+
+            _settings.TryGetComponent(out _transform);
+            _settings.TryGetActorComponent(ActorComponent.Check,out _groundCheck);
         }
 
         /// <summary>
@@ -167,6 +176,7 @@ namespace nitou.LevelActors.Effect {
         /// <param name="headPoint">Coordinates of the top of the capsule.</param>
         /// <param name="bottomPoint">Coordinates of the bottom of the capsule.</param>
         private void GetBottomHeadPosition(out Vector3 headPoint, out Vector3 bottomPoint) {
+
             // Get the current position of the capsule.
             var point = _transform.Position;
 
@@ -249,7 +259,6 @@ namespace nitou.LevelActors.Effect {
             Gizmos.DrawLine(targetPosition, centerPosition);
             Gizmos.DrawWireSphere(targetPosition, _settings.Radius);
         }
-
 #endif
     }
 }

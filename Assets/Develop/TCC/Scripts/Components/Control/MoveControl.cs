@@ -5,25 +5,32 @@ namespace nitou.LevelActors.Control{
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
     using nitou.LevelActors.Core;
+    using nitou.LevelActors.Shared;
+    using nitou.LevelActors.Attributes;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [DisallowMultipleComponent]
+    [AddComponentMenu(MenuList.MenuControl + nameof(MoveControl))]
+    [RequireInterface(typeof(IGroundContact))]
     public sealed class MoveControl : MonoBehaviour,
-        ITurn,
         IMove,
+        ITurn,
         IPriorityLifecycle<ITurn>,
         IUpdateComponent {
 
         [Title("Movement settings")]
 
         /// <summary>
-        /// Maximum movement speed of the character.
+        /// アクターの最大移動速度．
         /// </summary>
         [SerializeField, Indent] float _moveSpeed = 4;
 
         /// <summary>
-        /// Rotation speed of the model when character priority is high
+        /// アクター回転速度．（Priorityが高いときのみ適用）
         /// </summary>
-        [Range(-1, 50)]
+        [PropertyRange(-1, 50)]
         [SerializeField, Indent] int _turnSpeed = 15;
 
         /// <summary>
@@ -45,14 +52,13 @@ namespace nitou.LevelActors.Control{
         [SerializeField, Indent] float _angle = 45;
 
         /// <summary>
-        /// Direction of movement.
-        /// If anything other than Vector3.zero is specified,
-        /// the character's direction of movement is limited to the direction of the specified axis.
+        /// 動きの方向を制限するための軸．
+        /// Vector3.zero以外が指定されると、アクターはその軸方向のみに移動する．
         /// </summary>
         [SerializeField, Indent] Vector3 _lockAxis = Vector3.zero;
 
 
-        [Title("Priorities")]
+        [Title("Priority Settings")]
 
         /// <summary>
         /// Determines if MoveControl is used to move the character.
@@ -81,13 +87,16 @@ namespace nitou.LevelActors.Control{
         [Range(0, 1)]
         [SerializeField, Indent] float _turnStopThreshold = 0;
 
-        private IGroundContact _groundCheck;
-        private bool _hasGroundCheck;
-        private Transform _transform;
-        private Vector3 _moveDirection = Vector3.forward;
-        private float _currentSpeed;
+        // references
         private ActorSettings _actorSettings;
         private IBrain _brain;
+        private IGroundContact _groundCheck;
+        private Transform _transform;
+
+        // state
+        private bool _hasGroundCheck;
+        private Vector3 _moveDirection = Vector3.forward;
+        private float _currentSpeed;
         private Vector2 _inputValue;
         private bool _hasInput;
         private float _yawAngle;
@@ -96,6 +105,11 @@ namespace nitou.LevelActors.Control{
 
         /// ----------------------------------------------------------------------------
         // Properity
+
+        /// <summary>
+        /// 処理オーダー．
+        /// </summary>
+        int IUpdateComponent.Order => Order.Control;
 
         /// <summary>
         /// Current movement speed. If priority is 0, the movement speed is also 0.
@@ -193,10 +207,6 @@ namespace nitou.LevelActors.Control{
         /// </summary>
         float ITurn.YawAngle => _yawAngle;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        int IUpdateComponent.Order => Order.Control;
 
 
         // references
@@ -219,16 +229,16 @@ namespace nitou.LevelActors.Control{
 
 
         /// ----------------------------------------------------------------------------
-        // MeonoBehaviour Method
+        // Lifecycle Events
 
         private void Awake() {
-            // 
-            _actorSettings = gameObject.GetComponentInParent<ActorSettings>();
-            
-            // 
-            _transform = _actorSettings.GetComponent<Transform>();
-            _brain = _actorSettings.GetComponent<IBrain>();
-            _hasGroundCheck = _actorSettings.TryGetComponent(out _groundCheck);
+            // ActorSettings
+            _actorSettings = gameObject.GetComponentInParent<ActorSettings>() ?? throw new System.NullReferenceException(nameof(_actorSettings));
+
+            // Components
+            _actorSettings.TryGetComponent<Transform>(out _transform);
+            _actorSettings.TryGetComponent<IBrain>(out _brain);
+            _hasGroundCheck = _actorSettings.TryGetActorComponent(ActorComponent.Check, out _groundCheck);
         }
 
         private void OnDestroy() {
@@ -236,7 +246,7 @@ namespace nitou.LevelActors.Control{
         }
 
         void IUpdateComponent.OnUpdate(float deltaTime) {
-            using var profiler = new ProfilerScope(nameof(MoveControl));
+            using var _ = new ProfilerScope(nameof(MoveControl));
 
             if (_hasInput) {
                 var preDirection = _moveDirection;
@@ -297,7 +307,7 @@ namespace nitou.LevelActors.Control{
             var offset = new Vector3(0, 0.1f, 0);
             var position = transform.position + offset;
 
-            // show lines when use Lock Axis.
+            // 移動の制限軸.
             if (IsLockAxis) {
                 var size = Vector3.one * 0.2f;
                 var p1 = position + _lockAxis * 5;
@@ -310,8 +320,7 @@ namespace nitou.LevelActors.Control{
             }
 
             // show line about Move velocities.
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(position, MoveVelocity);
+            Gizmos_.DrawRay(position, MoveVelocity, Colors.Green);
         }
 
 #endif

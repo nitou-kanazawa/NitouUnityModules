@@ -8,6 +8,7 @@ namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Core;
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
+    using nitou.LevelActors.Shared;
 
     /// <summary>
     /// This is a component that performs sight detection.

@@ -5,23 +5,35 @@ using nitou.DesignPattern.Pooling;
 
 namespace nitou.LevelActors.Core{
     using nitou.LevelActors.Interfaces.Components;
+    using nitou.LevelActors.Shared;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    [SelectionBase]
     [DisallowMultipleComponent]
+    [AddComponentMenu(MenuList.MenuBrain + nameof(ActorSettings))]
     public sealed class ActorSettings : MonoBehaviour{
-
-        [Title("Environment Settings")]        
-        [SerializeField, Indent] LayerMask _environmentLayer;
 
         [Title("Body Settings")]
         [SerializeField, Indent] float _mass = 1;
         [SerializeField, Indent] float _height = 1.4f;
         [SerializeField, Indent] float _radius = 0.5f;
 
+        [Title("Hierarchy")]
+        [SerializeField, Indent] Transform _checkParent;
+        [SerializeField, Indent] Transform _controlParent;
+        [SerializeField, Indent] Transform _effectParent;
+
+        [Title("Environment Settings")]        
+        [SerializeField, Indent] LayerMask _environmentLayer;
+
+
         // Camera
         private Camera _camera;
         private Transform _cameraTransform;
 
-        // List to store Collider components under GameObject.
+        // GameObject配下のコライダーリスト
         private readonly List<Collider> _hierarchyColliders = new();
 
         // 定数
@@ -34,17 +46,16 @@ namespace nitou.LevelActors.Core{
         // Properity
 
         /// <summary>
-        /// Layer for recognizing terrain colliders.
-        /// </summary>
-        public LayerMask EnvironmentLayer => _environmentLayer;
-
-        /// <summary>
         /// 半径
         /// </summary>
         public float Radius {
             get => _radius;
             set {
-                _radius = Mathf.Max(value, MIN_RADIUS);
+                var newValue = Mathf.Max(value, MIN_RADIUS);
+                if (Mathf.Approximately(_radius, newValue))
+                    return;
+
+                _radius = newValue;
             }
         }
 
@@ -66,6 +77,13 @@ namespace nitou.LevelActors.Core{
             set => _mass = value;
         }
 
+        /// <summary>
+        /// Layer for recognizing terrain colliders.
+        /// </summary>
+        public LayerMask EnvironmentLayer => _environmentLayer;
+
+        
+        
         /// <summary>
         ///     Returns true if a camera is set.
         /// </summary>
@@ -112,7 +130,7 @@ namespace nitou.LevelActors.Core{
         // MonoBehaviour Method
 
         private void Awake() {
-            // Get a list of components.
+            // Get a list of colliders.
             GatherOwnColliders();
 
             // Update the camera's Transform.
@@ -146,6 +164,7 @@ namespace nitou.LevelActors.Core{
         /// Retrieves the closest RaycastHit excluding the character's own colliders.
         /// </summary>
         public bool ClosestHit(RaycastHit[] hits, int count, float maxDistance, out RaycastHit closestHit) {
+            
             var min = maxDistance;
             closestHit = default;
             var isHit = false;
@@ -169,12 +188,29 @@ namespace nitou.LevelActors.Core{
             return isHit;
         }
 
+        /// <summary>
+        /// Actorコンポーネントを設定したGameObjectから取得する
+        /// </summary>
+        public bool TryGetActorComponent<T>(ActorComponent type, out T component){
+
+            // コンポーネント
+            Transform holder = type switch {
+                ActorComponent.Check => _checkParent,
+                ActorComponent.Effect => _effectParent,
+                ActorComponent.Control => _controlParent,
+                _ => this.transform
+            };
+            if (holder == null) holder = this.transform;
+
+            return holder.TryGetComponent(out component);
+        }
+
 
         /// ----------------------------------------------------------------------------
         // Private Method
 
         /// <summary>
-        /// 自身のコライダー情報を更新する
+        /// 自身のボディ配下コライダー情報を更新する
         /// </summary>
         private void GatherOwnColliders() {
             _hierarchyColliders.Clear();
@@ -189,21 +225,22 @@ namespace nitou.LevelActors.Core{
             _camera = Camera.main;
 
             // Update the CameraTransform if a camera is acquired.
-            if (_camera != null && _cameraTransform == null)
+            if (_camera != null && _cameraTransform == null) {
                 _cameraTransform = _camera.transform;
+            }
         }
 
         /// <summary>
-        ///     Updates components with <see cref="ICharacterSettingUpdateReceiver" />.
+        ///     Updates components with <see cref="IActorSettingUpdateReceiver" />.
         /// </summary>
         private void UpdateSettings() {
-            var controls = ListPool<ICharacterSettingUpdateReceiver>.New();
-
-            GetComponents(controls);
-            foreach (var control in controls)
-                control.OnUpdateSettings(this);
-
-            ListPool<ICharacterSettingUpdateReceiver>.Free(controls);
+            var controls = ListPool<IActorSettingUpdateReceiver>.New();
+            {
+                // 更新
+                GetComponents(controls);
+                controls.ForEach(c => c.OnUpdateSettings(this));
+            }
+            controls.Free();
         }
 
 
@@ -213,7 +250,15 @@ namespace nitou.LevelActors.Core{
             _environmentLayer = LayerMaskUtil.OnlyDefault();
         }
 #endif
+    }
 
+
+    public enum ActorComponent {
+        Brain,
+        Check,
+        Effect,
+        Control,
+        Others,
     }
 
 

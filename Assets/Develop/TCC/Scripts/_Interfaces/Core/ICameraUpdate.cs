@@ -10,7 +10,6 @@ namespace nitou.LevelActors.Interfaces.Core {
         /// <summary>
         /// Updates the camera's orientation.
         /// </summary>
-        /// <param name="deltaTime">Delta time.</param>
         void OnUpdate(float deltaTime);
     }
 }

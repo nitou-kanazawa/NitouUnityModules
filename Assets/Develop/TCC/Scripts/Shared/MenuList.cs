@@ -1,5 +1,5 @@
 
-namespace nitou.LevelActors.Utils {
+namespace nitou.LevelActors.Shared {
     
     internal static class MenuList {
         

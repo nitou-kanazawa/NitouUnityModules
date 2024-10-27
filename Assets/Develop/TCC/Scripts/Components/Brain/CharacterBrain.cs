@@ -8,16 +8,18 @@ namespace nitou.LevelActors.Brain {
     using nitou.LevelActors.Interfaces.Core;
     using nitou.LevelActors.Interfaces.Components;
     using nitou.LevelActors.Utils;
+    using nitou.LevelActors.Shared;
 
     /// <summary>
     /// This brain operates using <see cref="UnityEngine.CharacterController"/>.
     /// The height and width of the Agent are determined by <see cref="CharacterSettings.Height"/> and <see cref="CharacterSettings.Radius"/>.
     /// </summary>
+    [AddComponentMenu(MenuList.MenuBrain + nameof(CharacterBrain))]
+    [DefaultExecutionOrder(Order.UpdateBrain)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(ActorSettings))]
-    [DefaultExecutionOrder(Order.UpdateBrain)]
-    public class CharacterBrain : BrainBase, ICharacterSettingUpdateReceiver {
+    public class CharacterBrain : BrainBase, IActorSettingUpdateReceiver {
 
         /// <summary>
         /// Setting of axes along which the character can move.
@@ -51,7 +53,7 @@ namespace nitou.LevelActors.Brain {
         /// <param name="x">lock x axis</param>
         /// <param name="y">lock y axis</param>
         /// <param name="z">lock z axis</param>
-        public void SetFreezeAxis(bool x, bool y, bool z) {
+        public void SetFreezeAxis(bool x, bool y, bool z) { 
             _lockAxis.x = x ? 0 : 1;
             _lockAxis.y = y ? 0 : 1;
             _lockAxis.z = z ? 0 : 1;
@@ -208,7 +210,7 @@ namespace nitou.LevelActors.Brain {
         /// Callback when CharacterSettings is updated.
         /// </summary>
         /// <param name="settings">CharacterSettings.</param>
-        void ICharacterSettingUpdateReceiver.OnUpdateSettings(ActorSettings settings) {
+        void IActorSettingUpdateReceiver.OnUpdateSettings(ActorSettings settings) {
             // If the Controller is not set, retrieve it.
             if (_controller == null) TryGetComponent(out _controller);
 
@@ -262,7 +264,7 @@ namespace nitou.LevelActors.Brain {
         private void Reset() {
             // Update settings such as CharacterController.
             var settings = GetComponent<ActorSettings>();
-            ((ICharacterSettingUpdateReceiver)this).OnUpdateSettings(settings);
+            ((IActorSettingUpdateReceiver)this).OnUpdateSettings(settings);
         }
 
         private void OnValidate() {

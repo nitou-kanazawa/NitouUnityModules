@@ -5,25 +5,41 @@ using nitou.LevelActors.Control;
 
 public class TestPlayer : MonoBehaviour
 {
+
+    [SerializeField] PlayerInput _input;
+
+    [Space]
+
+    //[SerializeField] Animator _animator;
     [SerializeField] MoveControl _move;
-    [SerializeField] Animator _animator;
+    [SerializeField] JumpControl _jump;
 
-    
-    private void OnMove(InputValue value) {
-        // MoveAction‚Ì“ü—Í’l‚ğæ“¾
-        var axis = value.Get<Vector2>();
 
-        // ˆÚ“®‘¬“x‚ğ•Û
-        var velocity = new Vector3(axis.x, 0, axis.y);
+    private InputAction move;
 
-        //Debug_.Log($"input : {velocity}", Colors.Orange);
-        _move.Move(axis);
+    void Start() {
+
+        move = _input.actions["Move"];
+    }
+
+
+    public void OnMove(InputAction.CallbackContext context) { }
+
+    public void OnJump(InputAction.CallbackContext context) {
+
+        if (context.started) {
+            Debug_.Log("Jump!!", Colors.Orange);
+            _jump.Jump();
+        }
     }
 
 
 
     private void Update() {
-        _animator.SetFloat("Speed", _move.CurrentSpeed);
+        //_animator.SetFloat("Speed", _move.CurrentSpeed);
+
+        var inputMoveAxis = move.ReadValue<Vector2>();
+        _move.Move(inputMoveAxis);
     }
 
     //private void Update() {
