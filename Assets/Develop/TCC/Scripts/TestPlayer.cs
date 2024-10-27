@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using nitou;
 using nitou.LevelActors.Control;
+using nitou.LevelActors.Effect;
 
 public class TestPlayer : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class TestPlayer : MonoBehaviour
     //[SerializeField] Animator _animator;
     [SerializeField] MoveControl _move;
     [SerializeField] JumpControl _jump;
+    [SerializeField] ExtraForce _extraForce;
 
 
     private InputAction move;
@@ -33,6 +35,17 @@ public class TestPlayer : MonoBehaviour
         }
     }
 
+    public void OnDash(InputAction.CallbackContext context) {
+
+        if (context.started) {
+            Debug_.Log("Dash!!", Colors.DarkCyan);
+
+            var force = transform.forward * 15;
+            _extraForce.AddForce(force);
+        }
+    
+    
+    }
 
 
     private void Update() {

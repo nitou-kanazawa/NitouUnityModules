@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace nitou.LevelActors.Core {
@@ -23,6 +24,7 @@ namespace nitou.LevelActors.Core {
         /// </summary>
         public void CalculateVelocity() {
             using var _ = new ProfilerScope("Velocity Calculation");
+
             SumVelocities(_components, out var velocity);
             Velocity = velocity;
         }

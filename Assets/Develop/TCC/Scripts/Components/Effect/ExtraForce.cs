@@ -16,7 +16,7 @@ namespace nitou.LevelActors.Effect {
     /// </summary>
     [AddComponentMenu(MenuList.MenuEffect + nameof(ExtraForce))]
     [DisallowMultipleComponent]
-    public class ExtraForce : ComponentBase,
+    public sealed class ExtraForce : ComponentBase,
         IEffect,
         IEarlyUpdateComponent {
 
@@ -255,9 +255,9 @@ namespace nitou.LevelActors.Effect {
             Gizmos_.DrawSphere(targetPosition, _settings.Radius, Colors.Blue.WithAlpha(0.4f));
 
             // Represent the line to the target position and the wireframe of the movement vector.
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(targetPosition, centerPosition);
-            Gizmos.DrawWireSphere(targetPosition, _settings.Radius);
+            var color = Color.white;
+            Gizmos_.DrawLine(targetPosition, centerPosition, color);
+            Gizmos_.DrawWireSphere(targetPosition, _settings.Radius, color);
         }
 #endif
     }
