@@ -6,7 +6,7 @@ using UnityEngine;
 // [メモ]
 //  ・UnityEngine.Objectから派生したオブジェクトは自分で破棄する必要がある. (Texture2D, Mesh, GameObject, etc)
 
-namespace nitou.DesignPattern {
+namespace nitou.BachProcessor {
 
     /// <summary>
     /// Creates a ScriptableObject as a singleton.

@@ -11,8 +11,8 @@ namespace nitou.LevelActors.Control{
     /// <summary>
     /// 
     /// </summary>
-    [DisallowMultipleComponent]
     [AddComponentMenu(MenuList.MenuControl + nameof(MoveControl))]
+    [DisallowMultipleComponent]
     [RequireInterface(typeof(IGroundContact))]
     public sealed class MoveControl : MonoBehaviour,
         IMove,
