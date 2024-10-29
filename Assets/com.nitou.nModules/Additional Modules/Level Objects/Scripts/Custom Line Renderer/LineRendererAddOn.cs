@@ -1,11 +1,11 @@
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 // [参考]
 //  qiita: UnityでGameObjectにHideFlagsを設定した時の挙動まとめ https://qiita.com/Shairo/items/df8077452d632e788bc1
 //  Hatena: Componentの値をInspectorView上で編集不可能にする https://www.mum-meblog.com/entry/unity-tips/sample-hideflags
 
 namespace nitou.LevelObjects {
-    using nitou.Inspector;
 
     /// <summary>
     /// <see cref="LineRenderer"/>に操作するコンポーネントの基底クラス

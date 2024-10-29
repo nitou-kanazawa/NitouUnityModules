@@ -1,11 +1,11 @@
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 // [参考]
 //  qiita: 3Dオブジェクトの残像処理 https://qiita.com/madoramu_f/items/fada99645cd03fd7f515
 //  UnityIndies: マテリアル、理解してないとすぐにメモリリーク https://www.create-forever.games/unity-material-memory-leak/
 
 namespace nitou.MaterialControl {
-    using nitou.Inspector;
 
     /// <summary>
     /// マテリアルの操作を行うコンポーネント

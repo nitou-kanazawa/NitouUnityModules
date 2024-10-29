@@ -1,7 +1,7 @@
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace nitou.LevelObjects {
-    using nitou.Inspector;
 
     [ExecuteAlways]
     [RequireComponent(typeof(LineRenderer), typeof(SphereCollider))]

@@ -3,11 +3,13 @@ using UnityEngine.InputSystem;
 using nitou;
 using nitou.LevelActors.Control;
 using nitou.LevelActors.Effect;
+using nitou.LevelActors.Inputs;
 
 public class TestPlayer : MonoBehaviour
 {
 
-    [SerializeField] PlayerInput _input;
+    //[SerializeField] PlayerInput _input;
+    [SerializeField] ActorBrain _input;
 
     [Space]
 
@@ -19,10 +21,10 @@ public class TestPlayer : MonoBehaviour
 
     private InputAction move;
 
-    void Start() {
+    //void Start() {
 
-        move = _input.actions["Move"];
-    }
+    //    move = _input.actions["Move"];
+    //}
 
 
     public void OnMove(InputAction.CallbackContext context) { }
@@ -51,8 +53,13 @@ public class TestPlayer : MonoBehaviour
     private void Update() {
         //_animator.SetFloat("Speed", _move.CurrentSpeed);
 
-        var inputMoveAxis = move.ReadValue<Vector2>();
+        var inputMoveAxis = _input.CharacterActions.movement.value;
         _move.Move(inputMoveAxis);
+
+        if (_input.CharacterActions.attack1.Started) {
+            Debug_.Log("Jump!!", Colors.Orange);
+            _jump.Jump();
+        }
     }
 
     //private void Update() {

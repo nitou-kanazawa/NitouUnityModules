@@ -94,6 +94,7 @@ namespace nitou.LevelActors.Effect {
         }
 
         void IEarlyUpdateComponent.OnUpdate(float deltaTime) {
+
             // If there is a vector affecting the character, perform deceleration and bounce processing.
             if (_velocity.magnitude > _threshold) {
                 // If there is a collider at the destination, reflect the vector.
@@ -134,7 +135,7 @@ namespace nitou.LevelActors.Effect {
         // Public Method
 
         /// <summary>
-        ///     Add impact to the character.
+        /// Add impact to the character.
         /// </summary>
         /// <param name="value">Power</param>
         public void AddForce(Vector3 value) {
@@ -142,7 +143,7 @@ namespace nitou.LevelActors.Effect {
         }
         
         /// <summary>
-        ///     Override velocity.
+        /// Override velocity.
         /// </summary>
         /// <param name="value">new value.</param>
         public void SetVelocity(Vector3 value) {

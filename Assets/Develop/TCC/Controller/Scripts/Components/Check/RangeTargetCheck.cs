@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using nitou.BachProcessor;
+using nitou.Inspector;
 
 namespace nitou.LevelActors.Check {
     using nitou.LevelActors.Core;

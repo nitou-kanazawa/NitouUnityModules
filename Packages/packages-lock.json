@@ -21,14 +21,14 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0"
       },
-      "hash": "a8290d0511ed5a0c803755936131850591f3da76"
+      "hash": "0cc9e4fdff75d6c36625d35215561cd20b12ff49"
     },
     "com.nitou.ntools": {
       "version": "https://github.com/nitou-kanazawa/NitouUnityLib.git?path=Assets/com.nitou.nTools",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a8290d0511ed5a0c803755936131850591f3da76"
+      "hash": "0cc9e4fdff75d6c36625d35215561cd20b12ff49"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.4",

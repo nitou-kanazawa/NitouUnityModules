@@ -2,9 +2,9 @@
 using System;
 using UnityEngine;
 using UnityEditor;
+using Sirenix.OdinInspector;
 
 namespace nitou.EditorShared {
-    using nitou.Inspector;
 
     /// <summary>
     /// Editorで参照するプロジェクト固有の設定データ

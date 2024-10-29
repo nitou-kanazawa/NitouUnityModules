@@ -458,6 +458,7 @@ GameObject:
   m_Component:
   - component: {fileID: 547729355}
   - component: {fileID: 547729354}
+  - component: {fileID: 547729356}
   m_Layer: 0
   m_Name: Trap
   m_TagString: Untagged
@@ -502,6 +503,21 @@ Transform:
   - {fileID: 1585515778}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &547729356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547729353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fc5aea1451afe409ff18121075efb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text1: 
+  text2: Respawn
+  text3: Untagged
 --- !u!1 &566765627
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +613,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 632083488}
-  - component: {fileID: 632083489}
+  - component: {fileID: 632083491}
   - component: {fileID: 632083490}
   m_Layer: 0
   m_Name: Inputs
@@ -621,80 +637,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1802817244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &632083489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 632083487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 2e9b1f9258b2c8a45a2de5d944fc357d, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f4ae1156-2776-4e22-a608-bfac07b376e2
-    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 10061b37-8784-4848-abde-163c687029a1
-    m_ActionName: 'Player/Sprint[/Keyboard/shift]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1802817250}
-        m_TargetAssemblyTypeName: TestPlayer, Nitou.TCC
-        m_MethodName: OnJump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: e314d3f8-9c69-45f7-90df-9c3939989b38
-    m_ActionName: 'Player/Jump[/Keyboard/space]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b16f8ba7-31aa-4602-8447-9d5567ad999d
-    m_ActionName: 'Player/Crouch[/Keyboard/c,/Keyboard/ctrl]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1802817250}
-        m_TargetAssemblyTypeName: TestPlayer, Nitou.TCC
-        m_MethodName: OnDash
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 776eac0c-6dc7-4ca4-91c8-803015d3041f
-    m_ActionName: 'Player/Dash[/Mouse/middleButton]'
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &632083490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,11 +649,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a30b981df79ba241bc8eb17c70716a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionsAsset: {fileID: 0}
+  inputActionsAsset: {fileID: -944628639613478452, guid: 69030bb08dc0a7f4da42d243d43a930f, type: 3}
   _filterByActionMap: 0
   _gameplayActionMap: Gameplay
   _filterByControlScheme: 0
   _controlSchemeName: Keyboard Mouse
+--- !u!114 &632083491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632083487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 506b0786afbb8964385fd090ddff906a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _updateMode: 1
+  _characterActions:
+    jump:
+      value: 0
+    attack1:
+      value: 0
+    attack2:
+      value: 0
+    lockon:
+      value: 0
+    interact:
+      value: 0
+    dodge:
+      value: 0
+    guard:
+      value: 0
+    run:
+      value: 0
+    pitch:
+      value: 0
+    roll:
+      value: 0
+    movement:
+      value: {x: 0, y: 0}
+  _inputHandler: {fileID: 632083490}
 --- !u!1 &693173201
 GameObject:
   m_ObjectHideFlags: 0
@@ -2233,7 +2212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b414eef5df4571b458e5bd0281d30140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _input: {fileID: 632083489}
+  _input: {fileID: 632083491}
   _move: {fileID: 195028638}
   _jump: {fileID: 195028639}
   _extraForce: {fileID: 1912200531}

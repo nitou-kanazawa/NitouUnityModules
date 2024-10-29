@@ -21,6 +21,7 @@ namespace nitou.LevelActors.Inputs{
     /// <summary>
     /// 入力情報<see cref="CharacterActions"/>の更新処理と外部公開を担うコンポーネント
     /// </summary>
+    [DisallowMultipleComponent]
     public abstract class ActorBrain: MonoBehaviour{
 
         [TitleGroup("Settings")]

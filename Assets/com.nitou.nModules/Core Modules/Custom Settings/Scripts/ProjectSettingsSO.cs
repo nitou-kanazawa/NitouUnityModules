@@ -1,10 +1,10 @@
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 // [参考]
 //  qiita: Unityで独自の設定のUIを提供できるSettingsProviderの紹介と設定ファイルの保存について https://qiita.com/sune2/items/a88cdee6e9a86652137c
 
 namespace nitou.Settings {
-    using nitou.Inspector;
 
     /// <summary>
     /// Runtimeで参照するプロジェクト固有の設定データ
