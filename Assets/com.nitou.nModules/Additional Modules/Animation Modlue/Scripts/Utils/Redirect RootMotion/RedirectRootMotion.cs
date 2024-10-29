@@ -7,8 +7,7 @@ using Sirenix.OdinInspector;
 namespace nitou.AnimationModule {
 
     /// <summary>
-    /// A component which takes the root motion from an <see cref="UnityEngine.Animator"/> and applies it to a
-    /// different object.
+    /// <see cref="Animator"/>のルートモーションを別オブジェクトへ適用するためのコンポーネント．
     /// </summary>
     /// <remarks>
     /// This can be useful if the character's <see cref="Rigidbody"/> or <see cref="CharacterController"/> is on a
@@ -34,13 +33,12 @@ namespace nitou.AnimationModule {
         public ref Animator Animator => ref _animator;
 
         /// <summary>
-        /// The object which the root motion will be applied to.
+        /// ルートモーションが適用されるオブジェクト．
         /// </summary>
         public ref T Target => ref _target;
 
         /// <summary>
-        /// Returns true if the <see cref="Target"/> and <see cref="Animator"/> are set and
-        /// <see cref="Animator.applyRootMotion"/> is enabled.
+        /// ルートモーションが有効かどうか．
         /// </summary>
         public bool ApplyRootMotion => 
             Target != null && Animator != null && Animator.applyRootMotion;

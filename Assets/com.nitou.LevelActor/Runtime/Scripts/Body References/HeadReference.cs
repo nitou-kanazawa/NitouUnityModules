@@ -1,14 +1,11 @@
 using UnityEngine;
 
-namespace nitou.LevelObjects.Humanoid {
+namespace nitou.LevelActors.Humanoid {
 
     /// <summary>
     /// Humanoidの参照用コンポーネント
     /// </summary>
     [DisallowMultipleComponent]
-    public class HeadReference : MonoBehaviour, IHumanoidBodyReference{
-
-        
-
+    public sealed class HeadReference : BodyReferenceBase{
     }
 }

@@ -1,18 +1,19 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace nitou.LevelObjects.Humanoid {
+namespace nitou.LevelActors.Humanoid {
 
     public enum BodyType {
         RightHand,
         LeftHand,
+        Head,
     }
 
     /// <summary>
     /// Humanoidのボディ参照を保持するコンポーネント
     /// </summary>
     [DisallowMultipleComponent]
-    public class HumanoidBodyReferenceCollector : MonoBehaviour {
+    public sealed class HumanoidBodyReferenceCollector : MonoBehaviour {
 
         /// ----------------------------------------------------------------------------
         #region Field
@@ -29,14 +30,31 @@ namespace nitou.LevelObjects.Humanoid {
         [TabGroup("Foot")]
         [SerializeField, Indent] FootReference _rightFoot;
 
+        // ----- 
+
+        [TabGroup("Head")]
+        [SerializeField, Indent] HeadReference _head;
+
         #endregion
 
 
         /// ----------------------------------------------------------------------------
         // Properity
 
+        /// <summary>
+        /// 左手．
+        /// </summary>
         public Transform LeftHand => _leftHand.transform;
+
+        /// <summary>
+        /// 右手．
+        /// </summary>
         public Transform RightHand => _rightHand.transform;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Transform Head => _head.transform;
 
 
 
