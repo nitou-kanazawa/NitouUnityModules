@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 22f4140d594892649968fed60554226d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: 22f4140d594892649968fed60554226d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -126,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f9a6dde7fc7114e864dc52147b2cd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1 &3968962290309697214 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100126, guid: 22f4140d594892649968fed60554226d, type: 3}
@@ -143,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f9a6dde7fc7114e864dc52147b2cd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1 &3968962290309697280 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 22f4140d594892649968fed60554226d, type: 3}
@@ -160,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c996d0204133a4d8b8af9c1bd8efea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1 &3968962290309697282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: 22f4140d594892649968fed60554226d, type: 3}
@@ -177,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c996d0204133a4d8b8af9c1bd8efea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1 &3968962290309697306 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100026, guid: 22f4140d594892649968fed60554226d, type: 3}
@@ -194,3 +202,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d89bbecb6a559442882b02a269da1d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
