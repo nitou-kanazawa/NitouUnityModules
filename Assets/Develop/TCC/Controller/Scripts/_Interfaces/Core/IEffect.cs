@@ -3,15 +3,18 @@ using UnityEngine;
 namespace nitou.LevelActors.Interfaces.Core{
 
     /// <summary>
-    /// Interface for adding acceleration to a character.
+    /// アクターに加速度を与えるためのインターフェース．
     /// </summary>
     public interface IEffect  {
 
         /// <summary>
-        /// The acceleration to be added.
+        /// 追加する加速度
         /// </summary>
         Vector3 Velocity { get; }
 
+        /// <summary>
+        /// 加速度をリセットする．
+        /// </summary>
         void ResetVelocity();
     }
 }

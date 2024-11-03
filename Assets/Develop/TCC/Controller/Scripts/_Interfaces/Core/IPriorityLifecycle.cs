@@ -2,22 +2,22 @@
 namespace nitou.LevelActors.Interfaces.Core{
 
     /// <summary>
-    ///  This interface defines the lifecycle callbacks for a component with respect to its priority status.
+    /// コンポーネントの優先度に関連したライフサイクルコールバックを定義するインターフェース．
     /// </summary>
     public interface IPriorityLifecycle<T>{
 
         /// <summary>
-        /// Callback called during regular updates while having the highest priority.
+        /// 最高優先度を保持している間に、定期的に呼び出されるコールバック．
         /// </summary>
         void OnUpdateWithHighestPriority(float deltaTime);
 
         /// <summary>
-        /// Callback called when the highest priority is acquired.
+        /// 最高優先度を獲得した際に呼び出されるコールバック．
         /// </summary>
         void OnAcquireHighestPriority();
 
         /// <summary>
-        /// Callback called when the highest priority is lost.
+        /// 最高優先度を失った際に呼び出されるコールバック．
         /// </summary>
         void OnLoseHighestPriority();
     }

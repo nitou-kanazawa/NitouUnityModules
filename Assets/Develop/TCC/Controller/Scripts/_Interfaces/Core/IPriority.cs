@@ -3,12 +3,13 @@ using System.Collections.Generic;
 namespace nitou.LevelActors.Interfaces.Core {
 
     /// <summary>
-    /// Reorders objects based on priority.
+    /// 優先度に基づいてオブジェクトを再配置するインターフェース．
     /// </summary>
-    public interface IPriority<T> where T : class, IPriority<T> {
+    public interface IPriority<T> 
+        where T : class, IPriority<T> {
 
         /// <summary>
-        /// The priority of the object.
+        /// 優先度．
         /// </summary>
         int Priority { get; }
     }
@@ -20,13 +21,9 @@ namespace nitou.LevelActors.Interfaces.Core {
     public static class PriorityExtensions {
 
         /// <summary>
-        /// Extracts the class with the highest priority.
-        /// Classes with a priority of 0 or lower are treated as non-existent.
+        /// 最も高い優先度を持つクラスを抽出する。
+        /// 優先度が0以下のクラスは存在しないものとして扱う。
         /// </summary>
-        /// <param name="values">List</param>
-        /// <param name="result">The class with the highest priority.</param>
-        /// <typeparam name="T">A class that inherits from IPriority.</typeparam>
-        /// <returns>True if the class with the highest priority is found.</returns>
         public static bool GetHighestPriority<T>(this IEnumerable<T> values, out T result) 
             where T : class, IPriority<T> {
 

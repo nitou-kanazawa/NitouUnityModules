@@ -3,19 +3,19 @@ using UnityEngine;
 namespace nitou.LevelActors.Interfaces.Core {
 
     /// <summary>
-    /// Interface for consistently accessing coordinates and orientations other than Transform.
-    /// Values are cached in advance before Update, and cached values are used for Get operations.
-    /// For Set operations, the changes are immediately reflected on the target component.
+    /// Transform以外の座標や向きを一貫してアクセスするためのインターフェース．
+    /// Update前に値をキャッシュし、Get操作ではキャッシュされた値を使用する．
+    /// Set操作では変更が即座にターゲットコンポーネントに反映される．
     /// </summary>
     public interface ITransform {
 
         /// <summary>
-        /// Coordinates
+        /// 位置．
         /// </summary>
         Vector3 Position { get; set; }
 
         /// <summary>
-        /// Orientation
+        /// 方向．
         /// </summary>
         Quaternion Rotation { get; set; }
     }

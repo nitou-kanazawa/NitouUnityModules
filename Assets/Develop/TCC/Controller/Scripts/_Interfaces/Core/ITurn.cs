@@ -2,18 +2,17 @@
 namespace nitou.LevelActors.Interfaces.Core {
 
     /// <summary>
-    /// Interface for updating the character's orientation.
-    /// Updates the character's orientation using the orientation with the highest priority.
+    /// アクターの方向制御インターフェース．
     /// </summary>
     public interface ITurn : IPriority<ITurn> {
 
         /// <summary>
-        /// Orientation update speed.
+        /// 方向の回転速度．
         /// </summary>
         int TurnSpeed { get; }
 
         /// <summary>
-        /// The final angle the character will face.
+        /// 最終的な方向．
         /// </summary>
         float YawAngle { get; }
     }

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a472a4806da7f9147a4a5cd7eee170df, type: 3}
+  m_Name: Brend1D_GreatSword_Equiped_Move
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 3798222672923459585
+  references:
+    version: 2
+    RefIds:
+    - rid: 3798222672923459585
+      type: {class: LinearMixerTransition, ns: Animancer, asm: Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Speed: 1
+        _Animations:
+        - {fileID: 7400000, guid: 387ff350e5a53134ca58927d9812376d, type: 3}
+        - {fileID: 7400002, guid: a57ebd28b634d694aba8dfbc18d8866d, type: 3}
+        - {fileID: 7400002, guid: 299a53df427c1fe41808e325677d6a58, type: 3}
+        - {fileID: 7400002, guid: 4fb894cc7917bd84387ff4fbd7b7e777, type: 3}
+        _Speeds:
+        - 1
+        - 1
+        - 1
+        - 1.2
+        _SynchronizeChildren: 00
+        _Thresholds:
+        - 0
+        - 2
+        - 5
+        - 9.5
+        _DefaultParameter: 0
+        _ExtrapolateSpeed: 1

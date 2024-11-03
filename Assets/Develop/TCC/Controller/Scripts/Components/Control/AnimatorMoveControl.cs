@@ -29,6 +29,12 @@ namespace nitou.LevelActors.Control {
         [SerializeField, Indent] int _movePriority = 10;
         [SerializeField, Indent] int _turnPriority = 10;
 
+        private Animator _animator;
+        private Transform _transform;
+        private IGroundContact _groundCheck;
+        private IWarp _warp;
+        private readonly Dictionary<int, List<AnimatorMoveBehaviour>> _behaviours = new();
+
         // state
         private bool _isFixedPosition = false; // Perform movement with Warp, preventing external influences.
         private bool _isWorkComponent; // When this setting is true, priorities are enabled.
@@ -40,29 +46,30 @@ namespace nitou.LevelActors.Control {
         // This handles cases where objects from different hierarchies own the animator.
         private RootMotionReceiver _rootMotionReceiver;
 
-        private Animator _animator;
-        private Transform _transform;
-        private IGroundContact _groundCheck;
-        private IWarp _warp;
-        private readonly Dictionary<int, List<AnimatorMoveBehaviour>> _behaviours = new();
 
+        /// ----------------------------------------------------------------------------
+        // Property
 
+        /// <summary>
+        /// èàóùèáèòÅD
+        /// </summary>
+        int IUpdateComponent.Order => Order.Control;
 
         /// <summary>
         /// Whether to use ground normal for movement.
         /// </summary>
         public bool UseGroundNormal { get; set; } = true;
 
-        /// <summary>
-        /// Connect with the animator.
-        /// Call this API after replacing the character model.
-        /// </summary>
-        public void Rebuild() {
-            // Set up RootMotionReceiver component for child Animators.
-            _animator = GetComponentInChildren<Animator>();
-            if (_animator.TryGetComponent(out _rootMotionReceiver) == false)
-                _rootMotionReceiver = _animator.gameObject.AddComponent<RootMotionReceiver>();
-        }
+        Vector3 IMove.MoveVelocity => _velocity;
+
+        int IPriority<IMove>.Priority => _isWorkComponent ? _movePriority : 0;
+
+
+        float ITurn.YawAngle => _turn;
+
+        int ITurn.TurnSpeed => -1; // Direction is instantly reflected.
+
+        int IPriority<ITurn>.Priority => _isWorkComponent ? _turnPriority : 0;
 
         /// <summary>
         /// Set priorities for movement and direction.
@@ -74,22 +81,9 @@ namespace nitou.LevelActors.Control {
             }
         }
 
-        #region ICharacterMove
-
-        int IPriority<IMove>.Priority => _isWorkComponent ? _movePriority : 0;
-
-        Vector3 IMove.MoveVelocity => _velocity;
-
-        #endregion
-
-        #region ICharacterTurn
-
-        float ITurn.YawAngle => _turn;
-
-        int IPriority<ITurn>.Priority => _isWorkComponent ? _turnPriority : 0;
-        int ITurn.TurnSpeed => -1; // Direction is instantly reflected.
-
-        #endregion
+        
+        /// ----------------------------------------------------------------------------
+        // Lifecycle Events
 
         private void Awake() {
             // Collect components.
@@ -134,6 +128,10 @@ namespace nitou.LevelActors.Control {
             _isWorkComponent = true;
         }
 
+
+        /// ----------------------------------------------------------------------------
+        // Public Method
+
         private bool IsInProgress(in AnimatorStateInfo current, out AnimatorMoveBehaviour result) {
             var currentHash = current.fullPathHash;
             if (_behaviours.ContainsKey(currentHash) == false)
@@ -162,6 +160,18 @@ namespace nitou.LevelActors.Control {
             }
         }
 
+
+        /// <summary>
+        /// Connect with the animator.
+        /// Call this API after replacing the character model.
+        /// </summary>
+        public void Rebuild() {
+            // Set up RootMotionReceiver component for child Animators.
+            _animator = GetComponentInChildren<Animator>();
+            if (_animator.TryGetComponent(out _rootMotionReceiver) == false)
+                _rootMotionReceiver = _animator.gameObject.AddComponent<RootMotionReceiver>();
+        }
+
         private void CacheBehaviour(int hash) {
             var behaviours = new List<AnimatorMoveBehaviour>();
             foreach (var behaviour in _animator.GetBehaviours(hash, 0)) {
@@ -171,7 +181,8 @@ namespace nitou.LevelActors.Control {
             _behaviours.Add(hash, behaviours);
         }
 
-        int IUpdateComponent.Order => Order.Control;
 
+        /// ----------------------------------------------------------------------------
+        // Public Method
     }
 }

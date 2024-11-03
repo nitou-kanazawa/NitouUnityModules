@@ -11,9 +11,8 @@ using UnityEditor;
 
 namespace nitou.AnimationModule.EditorCode {
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /*
+
     public static class AnimatorEditorUtility {
 
         // 選択中のオブジェクト
@@ -91,6 +90,8 @@ namespace nitou.AnimationModule.EditorCode {
             }
         }
     }
+
+    */
 
 }
 #endif

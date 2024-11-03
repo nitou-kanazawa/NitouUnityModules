@@ -3,12 +3,12 @@ using UnityEngine;
 namespace nitou.LevelActors.Interfaces.Core {
 
     /// <summary>
-    /// Interface for controlling character movement.
+    /// アクターの移動制御インターフェース．
     /// </summary>
     public interface IMove : IPriority<IMove> {
 
         /// <summary>
-        /// Movement vector.
+        /// 移動速度
         /// </summary>
         Vector3 MoveVelocity { get; }
     }
