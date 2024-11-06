@@ -1,0 +1,23 @@
+{
+    "name": "Action2D",
+    "rootNamespace": "Action2D",
+    "references": [
+        "GUID:14d14a38d1c9a1f43b1b739aba632d1e",
+        "GUID:dd8cd4690239d464487727ff012b3a2e",
+        "GUID:13fd594cf9c56d340bebe212d907c1fd",
+        "GUID:957d667169b382a479e051a59f944304",
+        "GUID:cc422d72a8b7b3f4693457ef4be2f82c",
+        "GUID:ed03e48825d0db54f97716770154361c",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:4c25c05f410a3a447a75c3b0909152ef"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

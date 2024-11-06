@@ -18,7 +18,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 82a3d7050e7c48e429d87a0c3ab79a6c, type: 3}
     _Speed: 1
     _NormalizedStartTime: NaN
   _randomMotionClips:
@@ -27,6 +27,6 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 6feb910c37b197d4ea621e5d224a19df, type: 3}
     _Speed: 1
     _NormalizedStartTime: NaN
