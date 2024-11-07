@@ -305,7 +305,6 @@ namespace nitou.LevelActors.Controller.Control{
             }
         }
 
-
         private void ProcessTurn(float dt) {
             // Determines direction of movement according to ground information
             var normal = _hasGroundCheck && _groundCheck.IsOnGround ? _groundCheck.GroundSurfaceNormal : Vector3.up;

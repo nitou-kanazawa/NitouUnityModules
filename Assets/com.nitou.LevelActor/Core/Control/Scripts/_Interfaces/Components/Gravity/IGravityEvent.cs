@@ -1,4 +1,5 @@
-using UnityEngine.Events;
+using System;
+using UniRx;
 
 namespace nitou.LevelActors.Controller.Interfaces.Components{
 
@@ -8,14 +9,13 @@ namespace nitou.LevelActors.Controller.Interfaces.Components{
     public interface IGravityEvent{
 
         /// <summary>
-        /// 着地したときの処理．
-        /// Receives the fall speed.
+        /// 着地時に通知するObservable．
         /// </summary>
-        UnityEvent<float> OnLanding { get; }
-        
+        public IObservable<float> OnLanding { get; }
+
         /// <summary>
-        /// Event for leaving the ground
+        /// 離陸時に通知するObservable．
         /// </summary>
-        UnityEvent OnLeave { get; }
+        public IObservable<Unit> OnLeave { get; }
     }
 }

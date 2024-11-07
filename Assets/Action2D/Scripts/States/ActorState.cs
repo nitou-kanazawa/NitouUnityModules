@@ -17,13 +17,14 @@ namespace Action2D.Actor{
         // Reference
         //public CharacterActor Actor { get; private set; }
         public ActorSettings Settings { get; private set; }
-        public ActorBrain Brain { get; private set; }
         public ActorAnimation Anim { get; private set; }
-        //public CharacterMovement Movement { get; private set; }
 
         // Control
         protected MoveControl MoveControl { get; private set; }
         protected JumpControl JumpControl { get; private set; }
+
+        // Input
+        public ActorBrain Brain { get; private set; }
 
 
         /// <summary>

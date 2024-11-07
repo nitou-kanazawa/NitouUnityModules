@@ -21,14 +21,14 @@ namespace nitou.LevelActors.Controller.Interfaces.Components{
         /// Multiplier for the gravity acting on the character
         /// </summary>
         float GravityScale { get; }
-        
+
         /// <summary>
-        /// Indicates if the character left the ground within the same frame.
+        /// 現在のフレームでキャラクターが地面から離れた場合はTrue．
         /// </summary>
         bool IsLeaved { get;  }
 
         /// <summary>
-        /// Indicates if the character landed on the ground within the same frame.
+        /// 現在のフレームでキャラクターが着地した場合はTrue．
         /// </summary>
         bool IsLanded { get;  }
     }

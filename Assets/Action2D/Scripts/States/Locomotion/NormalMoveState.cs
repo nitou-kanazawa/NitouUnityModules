@@ -78,6 +78,15 @@ namespace Action2D.Actor {
         }
 
         /// <summary>
+        /// ステートの更新処理．
+        /// </summary>
+        public override void PostUpdateBehaviour(float dt) {
+            // アニメーター速度設定
+            var dampTime = (StateMachine.StateElapsedTime < 0.5f) ? 0f : 0.1f;    // ※遷移直後はdampingをOFF
+            _moveAnim.State.Parameter = _smoothPlanarVelocity.GetNext(MoveControl.CurrentSpeed, dampTime);
+        }
+
+        /// <summary>
         /// ステート終了処理
         /// </summary>
         public override void ExitBehaviour(float dt, StateBase toState) {
@@ -112,46 +121,33 @@ namespace Action2D.Actor {
         public override void CheckExitTransition() {
 
             // 接地状態の場合，
-            //if (Context.IsGrounded) {
+            if (Context.IsGrounded) {
 
-            //    // ロックオン開始
-            //    if (InputActions.lockon.Canceled && InputActions.lockon.StartedElapsedTime < 0.2f) {
-            //        Debug_.Log("Lock On");
-            //        Context.IsLockOn = true;
-            //        StateMachine.EnqueueTransition<StrafeMoveState>();
-            //        return;
-            //    }
+                //    // ロックオン開始
+                //    if (InputActions.lockon.Canceled && InputActions.lockon.StartedElapsedTime < 0.2f) {
+                //        Debug_.Log("Lock On");
+                //        Context.IsLockOn = true;
+                //        StateMachine.EnqueueTransition<StrafeMoveState>();
+                //        return;
+                //    }
 
-            //    // 回避ステップ
-            //    if (InputActions.dodge.Started) {
-            //        StateMachine.EnqueueTransition<DashState>();
-            //    }
+                //    // 回避ステップ
+                //    if (InputActions.dodge.Started) {
+                //        StateMachine.EnqueueTransition<DashState>();
+                //    }
 
-            //    // 攻撃１
-            //    if (InputActions.attack1.Started) {
-            //        RequestAttackState(AttackType.Attack1, 1.2f);
-            //        return;
-            //    }
-            //    // 攻撃2
-            //    if (InputActions.attack2.Started) {
-            //        RequestAttackState(AttackType.Attack2, 1f);
-            //        return;
-            //    }
-            //}
+                //    // 攻撃１
+                //    if (InputActions.attack1.Started) {
+                //        RequestAttackState(AttackType.Attack1, 1.2f);
+                //        return;
+                //    }
+                //    // 攻撃2
+                //    if (InputActions.attack2.Started) {
+                //        RequestAttackState(AttackType.Attack2, 1f);
+                //        return;
+                //    }
+            }
 
-        }
-
-
-        /// ----------------------------------------------------------------------------
-        // Public Method (PhysicsUpdate処理)
-
-        /// <summary>
-        /// キャラクターの物理シミュレーション後の処理
-        /// </summary>
-        public override void PostCharacterSimulation(float dt) {
-            // アニメーター速度設定
-            var dampTime = (StateMachine.StateElapsedTime < 0.5f) ? 0f : 0.1f;    // ※遷移直後はdampingをOFF
-            _moveAnim.State.Parameter = _smoothPlanarVelocity.GetNext(MoveControl.CurrentSpeed, dampTime);
         }
 
 

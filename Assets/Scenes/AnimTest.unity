@@ -713,7 +713,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -5, z: 0}
-  m_LocalScale: {x: 100, y: 10, z: 1}
+  m_LocalScale: {x: 100, y: 10, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2046,6 +2046,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1281943004}
   - component: {fileID: 1281943005}
+  - component: {fileID: 1281943006}
+  - component: {fileID: 1281943007}
   m_Layer: 0
   m_Name: Behaviour
   m_TagString: Untagged
@@ -2080,8 +2082,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de3512fda313ee4990daea2ace67ad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialState: {fileID: 0}
+  _initialState: {fileID: 1281943007}
   _drawGizmo: 1
+--- !u!114 &1281943006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281943003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9039b0b8e6617374fb268119b2a5f3f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _idleAnimSet: {fileID: 11400000, guid: 2768228ef5eaf2a42b7d6359fa8a53cb, type: 2}
+  _randomizeIntervalRange:
+    _min: 5
+    _max: 20
+--- !u!114 &1281943007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281943003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f66271062b8e26b4fb8599f3d48265e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canRun: 1
+  _speedMultipiler: 1
+  _blendTree: {fileID: 11400000, guid: 001ddddc246efb345a29ea30726cdf34, type: 2}
 --- !u!1 &1282009064
 GameObject:
   m_ObjectHideFlags: 0
@@ -3065,12 +3098,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gravityScale: 2
-  _onLanding:
-    m_PersistentCalls:
-      m_Calls: []
-  _onLeave:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1274103673347300181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3165,8 +3192,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mass: 50
-  _height: 1.65
+  _height: 1.6
   _radius: 0.3
+  _movementReference: {fileID: 8386390123793541569}
   _checkParent: {fileID: 5554964587063691977}
   _effectParent: {fileID: 3394594102185768422}
   _controlParent: {fileID: 3883402581970625}
@@ -3316,7 +3344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613d4a885e925d746ab3d1ebbb2db4ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 4
+  _moveSpeed: 5
   _turnSpeed: 15
   _brakePower: 12
   _accelerator: 6
@@ -3434,13 +3462,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.49
+  m_Height: 1.44
   m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.2
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.905, z: 0}
+  m_Center: {x: 0, y: 0.88, z: 0}
 --- !u!114 &8386390123793541569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3618,7 +3646,7 @@ MonoBehaviour:
   _freezeAxis:
     x: 0
     y: 0
-    z: 1
+    z: 0
   _pushable: 1
   _detectCollisions: 1
 --- !u!114 &9210269348667769856
@@ -3633,6 +3661,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155e6d9092311fb409476e31253dea97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _settings: {fileID: 3795767608011512241}
+  _brain: {fileID: 7780641201088010779}
+  _statemachine: {fileID: 1281943005}
+  _groundCheck: {fileID: 7563991973563448161}
+  _moveControl: {fileID: 7161448781845849918}
+  _jumpControl: {fileID: 8972760009730375662}
+  _animation: {fileID: 26546327}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

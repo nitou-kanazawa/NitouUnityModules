@@ -5,6 +5,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using nitou;
 using nitou.LevelActors.Controller.Core;
+using nitou.LevelActors.Controller.Check;
+using nitou.LevelActors.Controller.Control;
 using nitou.LevelActors.Inputs;
 
 namespace Action2D.Actor {
@@ -12,12 +14,20 @@ namespace Action2D.Actor {
 
     [SelectionBase]
     [DisallowMultipleComponent]
-    public sealed class ActorCore : MonoBehaviour , ISetupable{
+    public sealed class ActorCore : MonoBehaviour, ISetupable {
 
-        [Title("Control")]
+        [Title("Behaviour")]
         [SerializeField, Indent] ActorSettings _settings;
         [SerializeField, Indent] ActorBrain _brain;
         [SerializeField, Indent] ActorFMS _statemachine;
+
+        [Title("Check")]
+        [SerializeField, Indent] GroundCheck _groundCheck;
+
+        [Title("Control")]
+        [SerializeField, Indent] MoveControl _moveControl;
+        [SerializeField, Indent] JumpControl _jumpControl;
+
 
         [Title("Animation")]
         [SerializeField, Indent] ActorAnimation _animation;
@@ -31,6 +41,11 @@ namespace Action2D.Actor {
 
         public bool IsSetupped { get; private set; }
 
+        /// <summary>
+        /// 接地状態かどうか．
+        /// </summary>
+        public bool IsGrounded => _groundCheck.IsOnGround;
+
 
         /// ----------------------------------------------------------------------------
         // Lifecycle Events
@@ -41,7 +56,7 @@ namespace Action2D.Actor {
         }
 
         private void OnDestroy() {
-            Teardown();    
+            Teardown();
         }
 
 
@@ -55,18 +70,18 @@ namespace Action2D.Actor {
             if (IsSetupped) return;
 
             // ステートマシン
-            var param = new ActorFMS.SetupParam(_settings, _brain,_animation);
+            var param = new ActorFMS.SetupParam(_settings, _brain, _animation);
             _statemachine.Initialize(this, param);
 
 
 
             // 更新処理の開始
             _disposables = new CompositeDisposable();
-            
+
+            // 
             this.UpdateAsObservable()
                 .Subscribe(_ => _statemachine.UpdateProcess())
                 .AddTo(_disposables);
-
 
             IsSetupped = true;
         }

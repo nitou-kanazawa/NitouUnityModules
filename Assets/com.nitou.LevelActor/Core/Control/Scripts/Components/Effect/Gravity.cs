@@ -1,10 +1,11 @@
 using System;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
 
 namespace nitou.LevelActors.Controller.Effect {
-    
+
     using Controller.Core;
     using Controller.Interfaces.Core;
     using Controller.Interfaces.Components;
@@ -41,17 +42,9 @@ namespace nitou.LevelActors.Controller.Effect {
         [PropertyRange(0, 10)]
         [SerializeField, Indent] float _gravityScale = 1f;
 
-        [Title("Events")]
-        
-        /// <summary>
-        /// Event that invoke upon landing.
-        /// </summary>
-        [SerializeField, Indent] UnityEvent<float> _onLanding;
 
-        /// <summary>
-        /// Event that invoke when character leaves the ground.
-        /// </summary>
-        [SerializeField, Indent] UnityEvent _onLeave;
+        private readonly Subject<float> _onLandingSubject = new();
+        private readonly Subject<Unit> _onLeaveSubject = new();
 
         // 
         private IGroundContact _groundCheck;
@@ -98,28 +91,26 @@ namespace nitou.LevelActors.Controller.Effect {
         private bool IsGroundedStrictly => _groundCheck.IsFirmlyOnGround && FallSpeed < 0;
 
         /// <summary>
-        /// Gravitational acceleration multiplier.
+        /// 重力スケール．
         /// 2 for a 2x faster fall, 0.5 for a lower gravity environment.
         /// </summary>
-        public float GravityScale { 
-            get => _gravityScale; 
-            set => _gravityScale = value; 
+        public float GravityScale {
+            get => _gravityScale;
+            set => _gravityScale = Mathf.Clamp(value, 0, 10);
         }
-        
-
-        /// <summary>
-        /// Event that invoke upon landing.
-        /// </summary>
-        public UnityEvent<float> OnLanding => _onLanding;
-
-        /// <summary>
-        /// Event that invoke when character leaves the ground.
-        /// </summary>
-        public UnityEvent OnLeave => _onLeave;
-
 
         Vector3 IEffect.Velocity => _velocity;
 
+
+        /// <summary>
+        /// 着地時に通知するObservable．
+        /// </summary>
+        public IObservable<float> OnLanding => _onLandingSubject;
+
+        /// <summary>
+        /// 離陸時に通知するObservable．
+        /// </summary>
+        public IObservable<Unit> OnLeave => _onLeaveSubject;
 
 
         /// ----------------------------------------------------------------------------
@@ -136,6 +127,11 @@ namespace nitou.LevelActors.Controller.Effect {
 
         private void OnDisable() {
             _velocity = Vector3.zero;
+        }
+
+        private void OnDestroy() {
+            _onLandingSubject.Dispose();
+            _onLeaveSubject.Dispose();
         }
 
         void IEarlyUpdateComponent.OnUpdate(float deltaTime) {
@@ -164,7 +160,7 @@ namespace nitou.LevelActors.Controller.Effect {
         public void SetVelocity(Vector3 velocity) {
             _velocity = velocity;
         }
-        
+
         /// <summary>
         /// 速度をリセットする
         /// </summary>
@@ -176,9 +172,9 @@ namespace nitou.LevelActors.Controller.Effect {
         /// ----------------------------------------------------------------------------
         // Private Method
 
-        private void ApplyGravity(float deltaTime) {
-            
-            var fallSpeed = Physics.gravity * (_gravityScale * deltaTime);
+        private void ApplyGravity(float dt) {
+
+            var fallSpeed = Physics.gravity * (_gravityScale * dt);
             var angle = Vector3.Angle(Vector3.up, _groundCheck.GroundSurfaceNormal);
 
             if (angle > 45 && _velocity.y < 0 && _groundCheck.DistanceFromGround < _settings.Radius * 0.5f) {
@@ -195,11 +191,11 @@ namespace nitou.LevelActors.Controller.Effect {
                 switch (newState) {
                     case State.Ground:
                         IsLanded = true;
-                        _onLanding?.Invoke(FallSpeed);
+                        _onLandingSubject.OnNext(FallSpeed);
                         break;
                     case State.Air:
                         IsLeaved = true;
-                        _onLeave?.Invoke();
+                        _onLeaveSubject.OnNext(Unit.Default);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

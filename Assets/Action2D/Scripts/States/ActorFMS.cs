@@ -22,14 +22,14 @@ namespace Action2D.Actor {
         /// ----------------------------------------------------------------------------
         // Private Method
 
-        private void PreCharacterSimulation(float dt) {
+        public void PreCharacterSimulation(float dt) {
             var state = CurrentState as ActorState;
             state?.PreCharacterSimulation(dt);
         }
 
-        private void PostCharacterSimulation(float dt) {
+        public void PostCharacterSimulation(float dt) {
             var state = CurrentState as ActorState;
-            state?.PostCharacterSimulation(dt);
+            CurrentState.PostUpdateBehaviour(dt);
         }
 
 
