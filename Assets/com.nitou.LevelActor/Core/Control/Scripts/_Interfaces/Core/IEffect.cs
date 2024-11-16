@@ -8,7 +8,7 @@ namespace nitou.LevelActors.Controller.Interfaces.Core {
     public interface IEffect {
 
         /// <summary>
-        /// í«â¡Ç∑ÇÈâ¡ë¨ìx
+        /// í«â¡Ç∑ÇÈâ¡ë¨ìxÅD
         /// </summary>
         Vector3 Velocity { get; }
 

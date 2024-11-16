@@ -42,7 +42,7 @@ namespace nitou.LevelActors.Controller.Effect {
         [PropertyRange(0, 10)]
         [SerializeField, Indent] float _gravityScale = 1f;
 
-
+        // Events
         private readonly Subject<float> _onLandingSubject = new();
         private readonly Subject<Unit> _onLeaveSubject = new();
 
@@ -57,6 +57,9 @@ namespace nitou.LevelActors.Controller.Effect {
         /// ----------------------------------------------------------------------------
         // Properity
 
+        /// <summary>
+        /// 処理順序．
+        /// </summary>
         int IEarlyUpdateComponent.Order => Order.Gravity;
 
         /// <summary>
@@ -79,16 +82,6 @@ namespace nitou.LevelActors.Controller.Effect {
         /// 現在フレームで着地したかどうか
         /// </summary>
         public bool IsLanded { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool IsGrounded => _groundCheck.IsOnGround && FallSpeed <= 0;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool IsGroundedStrictly => _groundCheck.IsFirmlyOnGround && FallSpeed < 0;
 
         /// <summary>
         /// 重力スケール．
@@ -171,6 +164,10 @@ namespace nitou.LevelActors.Controller.Effect {
 
         /// ----------------------------------------------------------------------------
         // Private Method
+
+        private bool IsGrounded => _groundCheck.IsOnGround && FallSpeed <= 0;
+
+        private bool IsGroundedStrictly => _groundCheck.IsFirmlyOnGround && FallSpeed < 0;
 
         private void ApplyGravity(float dt) {
 

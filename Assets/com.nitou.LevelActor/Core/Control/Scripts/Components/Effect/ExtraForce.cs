@@ -1,3 +1,5 @@
+using System;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 using nitou.BachProcessor;
@@ -42,11 +44,6 @@ namespace nitou.LevelActors.Controller.Effect {
         [PropertyRange(0, 1)] 
         [SerializeField, Indent] float _bounce = 0f;
 
-        /// <summary>
-        ///     Callbacks when hit other collider.
-        /// </summary>
-        public UnityEvent<Collider> OnHitOtherCollider;
-
         // References
         private ActorSettings _settings;
         private IGroundContact _groundCheck;
@@ -54,6 +51,8 @@ namespace nitou.LevelActors.Controller.Effect {
         
         // State
         private Vector3 _velocity;
+
+        private readonly Subject<Collider> _onHitOtherCollider = new();
 
         // 定数
         private const int HIT_CAPACITY = 15;
@@ -80,6 +79,11 @@ namespace nitou.LevelActors.Controller.Effect {
         /// </summary>
         public Vector3 Velocity => _velocity;
 
+        /// <summary>
+        /// 他コライダーと接触したときに通知するObservable．
+        /// </summary>
+        public IObservable<Collider> OnHitOtherCollider;
+
 
         /// ----------------------------------------------------------------------------
         // Lifecycle Events
@@ -88,21 +92,21 @@ namespace nitou.LevelActors.Controller.Effect {
             GatherComponents();
         }
 
-        private void OnValidate() {
-            _friction = _friction.Positive();
-            _drag = _drag.Positive();
-            _threshold = Mathf.Max(0.1f, _threshold);
+        private void OnDestroy() {
+            _onHitOtherCollider.Dispose();
         }
 
-        void IEarlyUpdateComponent.OnUpdate(float deltaTime) {
+        void IEarlyUpdateComponent.OnUpdate(float dt) {
 
             // If there is a vector affecting the character, perform deceleration and bounce processing.
             if (_velocity.magnitude > _threshold) {
+
                 // If there is a collider at the destination, reflect the vector.
-                if (HasColliderOnDestination(deltaTime, out var closestHit)) {
+                if (HasColliderOnDestination(dt, out var closestHit)) {
+
                     // Event to be called when colliding with other objects.
                     // Process before correcting Velocity.
-                    OnHitOtherCollider.Invoke(closestHit.collider);
+                    _onHitOtherCollider.OnNext(closestHit.collider);
 
                     if (_bounce > 0) {
                         // When colliding with other ExtraForce, propagate the impact.
@@ -124,7 +128,7 @@ namespace nitou.LevelActors.Controller.Effect {
 
                 // Decelerate the character's vector. The deceleration rate switches between ground and air.
                 var value = _groundCheck.IsOnGround ? _friction : _drag;
-                _velocity -= _velocity * (deltaTime * value);
+                _velocity -= _velocity * (dt * value);
             } else {
                 // If the acceleration falls below the threshold, disable the vector.
                 _velocity = Vector3.zero;
@@ -198,15 +202,15 @@ namespace nitou.LevelActors.Controller.Effect {
         /// <summary>
         ///     Determines if there is an object at the destination of movement.
         /// </summary>
-        /// <param name="deltaTime">Delta time since the previous frame.</param>
+        /// <param name="dt">Delta time since the previous frame.</param>
         /// <param name="closestHit">Information about the closest collider. It will be set to default if no objects are present.</param>
         /// <returns>True if an object is present.</returns>
-        private bool HasColliderOnDestination(float deltaTime, out RaycastHit closestHit) {
+        private bool HasColliderOnDestination(float dt, out RaycastHit closestHit) {
             // Get the positions of the character's head and bottom.
             GetBottomHeadPosition(out var bottom, out var top);
 
             // Calculate the distance: Character's radius + 1 frame of movement.
-            var distance = _settings.Radius * 0.5f + _velocity.magnitude * deltaTime;
+            var distance = _settings.Radius * 0.5f + _velocity.magnitude * dt;
 
             // Create an array for collision detection.
             var hits = ArrayPool<RaycastHit>.New(HIT_CAPACITY);
@@ -243,6 +247,13 @@ namespace nitou.LevelActors.Controller.Effect {
 
         /// ----------------------------------------------------------------------------
 #if UNITY_EDITOR
+
+        private void OnValidate() {
+            _friction = _friction.Positive();
+            _drag = _drag.Positive();
+            _threshold = Mathf.Max(0.1f, _threshold);
+        }
+
         private void OnDrawGizmosSelected() {
             if (!Application.isPlaying) return;
 
